@@ -1,0 +1,101 @@
+🚀 MVP Features (Phase 1 – Core)
+
+These are must-have features to make your website usable:
+
+1. User Authentication
+
+Social login with Google, Twitter/X, Facebook (via OAuth 2.0).
+
+Store tokens securely in MongoDB.
+
+Basic profile management (name, email, profile picture).
+
+2. Content Fetching
+
+Connect to user’s account (Twitter posts, Instagram captions, Facebook posts, Google Photos).
+
+Fetch recent messages, posts, and images.
+
+Store them temporarily in MongoDB for scanning.
+
+3. AI-Based Content Scanning
+
+Text Analysis: Detect bad words, offensive language, private info (emails, phone numbers).
+
+Image Analysis: Detect nudity, violence, drugs (using AI model/API).
+
+Label content with categories like: Safe, Offensive, Private Info, Inappropriate.
+
+4. Dashboard
+
+Show scanned results in a clean UI.
+
+Filters: by text, image, flagged reason.
+
+Allow user to select items.
+
+5. Delete / Clean
+
+User can delete flagged posts/messages/photos directly via API call.
+
+Update status in DB (Deleted / Skipped).
+
+⚡ Advanced Features (Phase 2 – Improvements)
+
+Once MVP works, add these for a premium experience:
+
+6. Auto-Clean Rules
+
+Let users set rules like:
+
+“Delete posts older than 2018 with offensive words.”
+
+“Auto-remove photos with nudity.”
+
+7. Multi-Platform Support
+
+Extend support for:
+
+LinkedIn
+
+TikTok
+
+Reddit
+
+Gmail (old embarrassing mails 😂).
+
+8. AI Suggestions
+
+Instead of just deleting, suggest “edit/rephrase” options.
+
+Example: Post says “This sucks” → Suggest “This isn’t great.”
+
+9. Reports & Analytics
+
+Weekly report: how many posts scanned, deleted, safe.
+
+Pie chart of content categories.
+
+10. Premium Features (Monetization)
+
+Free tier: scan only last 50 posts.
+
+Paid tier: unlimited scan, auto-clean, detailed reports.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  git remote add origin https://github.com/arfatkazi/SocialCleanAI.git
+git branch -M main
+git push -u origin main
