@@ -1,6 +1,6 @@
-🚀 MVP Features (Phase 1 – Core)
+🚀 Phase 1 – Core (MVP Features)
 
-These are must-have features to make your website usable:
+These are must-have features to make the website usable:
 
 1. User Authentication
 
@@ -24,7 +24,7 @@ Text Analysis: Detect bad words, offensive language, private info (emails, phone
 
 Image Analysis: Detect nudity, violence, drugs (using AI model/API).
 
-Label content with categories like: Safe, Offensive, Private Info, Inappropriate.
+Label content with categories: Safe, Offensive, Private Info, Inappropriate.
 
 4. Dashboard
 
@@ -40,7 +40,7 @@ User can delete flagged posts/messages/photos directly via API call.
 
 Update status in DB (Deleted / Skipped).
 
-⚡ Advanced Features (Phase 2 – Improvements)
+⚡ Phase 2 – Improvements (Advanced Features)
 
 Once MVP works, add these for a premium experience:
 
@@ -86,16 +86,3 @@ Paid tier: unlimited scan, auto-clean, detailed reports.
 
 
 
-
-
-
-
-
-
-
-
-
-
-  git remote add origin https://github.com/arfatkazi/SocialCleanAI.git
-git branch -M main
-git push -u origin main
