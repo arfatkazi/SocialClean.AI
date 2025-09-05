@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
   },
   password: { type: String, required: true },
+  age: { type: Number },
 
   // For Social Logins
   provider: {
@@ -27,7 +28,11 @@ const userSchema = new mongoose.Schema({
   },
   bio: { type: String, default: "" },
   dateOfBirth: { type: Date },
-  gender: { type: String, enum: ["male", "female", "other"], default: "other" },
+  gender: {
+    type: String,
+    enum: ["male", "female", "other", "adult"],
+    default: "other",
+  },
   phone: { type: String },
   location: {
     country: { type: String },

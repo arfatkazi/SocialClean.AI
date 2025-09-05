@@ -11,7 +11,7 @@ const generateToken = (id) => {
 // Signup
 export const signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
@@ -19,15 +19,29 @@ export const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     user = await User.create({
-      name,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
     });
 
+    // ✅ Strip sensitive fields
+    const userResponse = {
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      profilePic: user.profilePic,
+      role: user.role,
+      subscription: {
+        type: user.subscription.type,
+      },
+    };
+
     res.status(201).json({
       message: "Signup successful",
       token: generateToken(user._id),
-      user,
+      user: userResponse,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -40,17 +54,22 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user)
+    if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Remove password before sending user data
+    const { password: _, ...userData } = user.toObject();
 
     res.status(200).json({
       message: "Login successful",
       token: generateToken(user._id),
-      user,
+      user: userData,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -75,18 +94,12 @@ export const forgotPassword = async (req, res) => {
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+    // For now, return the reset URL in response (instead of only email)
+    res.status(200).json({
+      message: "Reset link generated",
+      resetURL: resetUrl,
+      rawToken: resetToken, // helpful for testing in Postman
     });
-
-    await transporter.sendMail({
-      to: user.email,
-      subject: "Password Reset Request",
-      html: `<p>Click <a href="${resetUrl}">here</a> to reset your password</p>`,
-    });
-
-    res.status(200).json({ message: "Reset link sent to email" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -95,6 +108,7 @@ export const forgotPassword = async (req, res) => {
 // Reset password
 export const resetPassword = async (req, res) => {
   try {
+    // Hash incoming token (must match DB hashed version)
     const resetPasswordToken = crypto
       .createHash("sha256")
       .update(req.params.token)
@@ -102,14 +116,17 @@ export const resetPassword = async (req, res) => {
 
     const user = await User.findOne({
       resetPasswordToken,
-      resetPasswordExpire: { $gt: Date.now() },
+      resetPasswordExpire: { $gt: Date.now() }, // check expiry
     });
 
-    if (!user)
+    if (!user) {
       return res.status(400).json({ message: "Invalid or expired token" });
+    }
 
+    // Hash the new password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
+    // Update user password & clear reset token
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
