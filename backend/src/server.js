@@ -6,6 +6,7 @@ import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -15,6 +16,9 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
+
+//Routes
+app.use("/api/auth", authRoutes);
 
 const aj = arcjet({
   key: process.env.ARCJET_KEY,
