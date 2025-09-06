@@ -2,7 +2,7 @@
 
 These are must-have features to make the website usable:
 
-1. User Authentication
+1. User Authentication ✅ Done
 
 Basic Authentication.  ✅ Done
 
