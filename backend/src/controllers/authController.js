@@ -3,13 +3,11 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 
-// Generate JWT
 const generateToken = (id, role, subscription) =>
   jwt.sign({ id, role, subscription }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
 
-// ---------------- SIGNUP ----------------
 export const signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -38,7 +36,6 @@ export const signup = async (req, res) => {
   }
 };
 
-// ---------------- LOGIN ----------------
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -67,7 +64,6 @@ export const login = async (req, res) => {
   }
 };
 
-// ---------------- SOCIAL LOGIN ----------------
 export const socialLogin = async (req, res) => {
   try {
     const { provider, providerId, firstName, lastName, email, profilePic } =
@@ -112,7 +108,6 @@ export const socialLogin = async (req, res) => {
   }
 };
 
-// ---------------- FORGOT PASSWORD ----------------
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -129,7 +124,6 @@ export const forgotPassword = async (req, res) => {
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    // TODO: Send email via nodemailer in production
     res.status(200).json({
       message: "Reset link generated",
       resetURL: resetUrl,
@@ -139,7 +133,6 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
-// ---------------- RESET PASSWORD ----------------
 export const resetPassword = async (req, res) => {
   try {
     const resetPasswordToken = crypto

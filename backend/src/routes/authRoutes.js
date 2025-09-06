@@ -10,14 +10,12 @@ import {
 
 const router = express.Router();
 
-// Local auth
 router.post("/signup", signup);
 router.post("/login", login);
 
 // Social login
 router.post("/social-login", socialLogin);
 
-// Password reset
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:token", resetPassword);
 

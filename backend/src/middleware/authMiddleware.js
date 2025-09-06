@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userSchema.js";
 
-// Protect routes (JWT verification)
 export const protect = async (req, res, next) => {
   let token;
 
