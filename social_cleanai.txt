@@ -2,15 +2,15 @@
 
 These are must-have features to make the website usable:
 
-1. User Authentication ✅ Done
+1. Local login/signup ✅
 
-Basic Authentication.  ✅ Done
+Social login (Google/Facebook/Twitter) ✅
 
-Social login with Google, Twitter/X, Facebook (via OAuth 2.0).
+Password reset ✅
 
-Store tokens securely in MongoDB. ✅ Done
+JWT authentication ✅
 
-Basic profile management (name, email, profile picture). ✅ Done
+Role-based & subscription-based access ✅
 
 2. Content Fetching
 

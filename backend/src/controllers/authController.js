@@ -1,74 +1,36 @@
 import User from "../models/userSchema.js";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
-};
+// Generate JWT
+const generateToken = (id, role, subscription) =>
+  jwt.sign({ id, role, subscription }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
 
-// Signup
+// ---------------- SIGNUP ----------------
 export const signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
+    // Check if user already exists
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Create user (password auto-hashed by schema)
+    user = await User.create({ firstName, lastName, email, password });
 
-    user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-    });
-
-    // ✅ Strip sensitive fields
-    const userResponse = {
-      id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      profilePic: user.profilePic,
-      role: user.role,
-      subscription: {
-        type: user.subscription.type,
-      },
-    };
+    const {
+      password: _,
+      resetPasswordToken,
+      resetPasswordExpire,
+      ...userData
+    } = user.toObject();
 
     res.status(201).json({
       message: "Signup successful",
-      token: generateToken(user._id),
-      user: userResponse,
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Login
-export const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-    // Remove password before sending user data
-    const { password: _, ...userData } = user.toObject();
-
-    res.status(200).json({
-      message: "Login successful",
-      token: generateToken(user._id),
+      token: generateToken(user._id, user.role, user.subscription.type),
       user: userData,
     });
   } catch (error) {
@@ -76,12 +38,85 @@ export const login = async (req, res) => {
   }
 };
 
-// Forgot password
+// ---------------- LOGIN ----------------
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(400).json({ message: "Invalid email or password" });
+
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch)
+      return res.status(400).json({ message: "Invalid email or password" });
+
+    const {
+      password: _,
+      resetPasswordToken,
+      resetPasswordExpire,
+      ...userData
+    } = user.toObject();
+
+    res.status(200).json({
+      message: "Login successful",
+      token: generateToken(user._id, user.role, user.subscription.type),
+      user: userData,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ---------------- SOCIAL LOGIN ----------------
+export const socialLogin = async (req, res) => {
+  try {
+    const { provider, providerId, firstName, lastName, email, profilePic } =
+      req.body;
+
+    if (!provider || !providerId) {
+      return res
+        .status(400)
+        .json({ message: "Provider and providerId are required" });
+    }
+
+    // Check if user exists
+    let user = await User.findOne({ provider, providerId });
+
+    if (!user) {
+      // Create new social user
+      user = await User.create({
+        firstName,
+        lastName,
+        email,
+        profilePic,
+        provider,
+        providerId,
+        password: crypto.randomBytes(16).toString("hex"), // random password
+      });
+    }
+
+    const {
+      password: _,
+      resetPasswordToken,
+      resetPasswordExpire,
+      ...userData
+    } = user.toObject();
+
+    res.status(200).json({
+      message: "Social login successful",
+      token: generateToken(user._id, user.role, user.subscription.type),
+      user: userData,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ---------------- FORGOT PASSWORD ----------------
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const resetToken = crypto.randomBytes(32).toString("hex");
@@ -94,21 +129,19 @@ export const forgotPassword = async (req, res) => {
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    // For now, return the reset URL in response (instead of only email)
+    // TODO: Send email via nodemailer in production
     res.status(200).json({
       message: "Reset link generated",
       resetURL: resetUrl,
-      rawToken: resetToken, // helpful for testing in Postman
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Reset password
+// ---------------- RESET PASSWORD ----------------
 export const resetPassword = async (req, res) => {
   try {
-    // Hash incoming token (must match DB hashed version)
     const resetPasswordToken = crypto
       .createHash("sha256")
       .update(req.params.token)
@@ -116,23 +149,22 @@ export const resetPassword = async (req, res) => {
 
     const user = await User.findOne({
       resetPasswordToken,
-      resetPasswordExpire: { $gt: Date.now() }, // check expiry
+      resetPasswordExpire: { $gt: Date.now() },
     });
 
-    if (!user) {
+    if (!user)
       return res.status(400).json({ message: "Invalid or expired token" });
-    }
 
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-    // Update user password & clear reset token
-    user.password = hashedPassword;
+    user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
 
-    res.status(200).json({ message: "Password reset successful" });
+    // Optionally, auto-login user after password reset
+    res.status(200).json({
+      message: "Password reset successful",
+      token: generateToken(user._id, user.role, user.subscription.type),
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

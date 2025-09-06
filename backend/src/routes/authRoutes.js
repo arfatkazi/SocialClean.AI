@@ -3,17 +3,25 @@ import { protect } from "../middleware/authMiddleware.js";
 import {
   signup,
   login,
+  socialLogin,
   forgotPassword,
   resetPassword,
 } from "../controllers/authController.js";
 
 const router = express.Router();
 
+// Local auth
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", resetPassword);
 
+// Social login
+router.post("/social-login", socialLogin);
+
+// Password reset
+router.post("/forgot-password", forgotPassword);
+router.put("/reset-password/:token", resetPassword);
+
+// Get user profile
 router.get("/me", protect, (req, res) => {
   res.json({
     message: "User profile fetched successfully",
