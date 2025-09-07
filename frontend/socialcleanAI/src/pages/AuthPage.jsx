@@ -100,7 +100,6 @@ export default function AuthPage() {
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           />
 
-          {/* Password input with emoji toggle */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -114,9 +113,9 @@ export default function AuthPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-2.5 text-xl hover:scale-110 transition-transform"
+              className="absolute right-3 top-2 text-m transition-transform"
             >
-              {showPassword ? "🙈" : "👁‍🗨"}
+              {showPassword ? "🙈" : "👀"}
             </button>
           </div>
 
