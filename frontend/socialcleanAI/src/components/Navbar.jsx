@@ -2,21 +2,22 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="bg-white shadow-md px-6 py-3 flex justify-between items-center">
+    <nav className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-4 flex justify-between items-center shadow-lg">
       {/* Brand Logo / Name */}
-      <div className="text-2xl font-bold text-blue-600">SocialCleanAI</div>
+      <div className="text-2xl font-extrabold text-white tracking-wide">
+        SocialCleanAI
+      </div>
 
-      {/* Navigation Links */}
       <div className="space-x-6">
         <Link
           to="/"
-          className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+          className="text-white/80 hover:text-white font-medium transition-colors"
         >
           Auth
         </Link>
         <Link
           to="/dashboard"
-          className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+          className="text-white/80 hover:text-white font-medium transition-colors"
         >
           Dashboard
         </Link>

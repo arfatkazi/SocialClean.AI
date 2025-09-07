@@ -10,8 +10,9 @@ export default function Dashboard() {
           content with ease.
         </p>
 
-        <button className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition">
-          Go to Dashboard
+        <button className="relative w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-semibold shadow-lg overflow-hidden group">
+          <span className="relative z-10">Go to Dashboard</span>
+          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-in-out"></span>
         </button>
       </div>
     </div>
