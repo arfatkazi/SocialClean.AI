@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema(
     dateOfBirth: { type: Date },
     gender: {
       type: String,
-      enum: ["male", "female", "other"],
+      enum: ["male", "female", "other", "adult"],
       default: "other",
     },
     phone: { type: String },
@@ -54,17 +54,17 @@ const userSchema = new mongoose.Schema(
     role: { type: String, enum: ["user", "admin"], default: "user" },
     subscription: {
       type: { type: String, enum: ["free", "premium"], default: "free" },
-      expiry: { type: Date }, // premium expiry date
+      expiry: { type: Date },
     },
 
     // Security
     resetPasswordToken: { type: String },
     resetPasswordExpire: { type: Date },
   },
-  { timestamps: true } // automatically adds createdAt & updatedAt
+  { timestamps: true }
 );
 
-// Compound index for social logins to prevent duplicates
+// Compound index for social logins
 userSchema.index(
   { provider: 1, providerId: 1 },
   { unique: true, sparse: true }
@@ -73,16 +73,24 @@ userSchema.index(
 // Hash password before saving
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
-// Method to compare password during login
+// Age-based gender logic
+userSchema.pre("save", function (next) {
+  if (this.age >= 18 && this.age <= 25) {
+    this.gender = "adult";
+  }
+  next();
+});
+
+// Compare password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 const User = mongoose.model("User", userSchema);
-
 export default User;

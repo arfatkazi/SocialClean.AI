@@ -9,6 +9,8 @@ export default function AuthPage() {
     password: "",
     firstName: "",
     lastName: "",
+    age: "",
+    gender: "",
   });
   const navigate = useNavigate();
 
@@ -48,13 +50,14 @@ export default function AuthPage() {
       password: "",
       firstName: "",
       lastName: "",
+      age: "",
+      gender: "",
     });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-100 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-        {/* Header */}
         <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
           {isLogin
             ? "Login to SocialCleanAI"
@@ -66,30 +69,58 @@ export default function AuthPage() {
             : "Signup to get started with us ✨"}
         </p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
-            <div className="flex gap-3">
+            <>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  required
+                  className="w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  required
+                  className="w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+
+              {/* Age Input */}
               <input
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                value={form.firstName}
+                type="number"
+                name="age"
+                placeholder="Age"
+                value={form.age}
                 onChange={handleChange}
                 required
-                className="w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               />
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
-                value={form.lastName}
-                onChange={handleChange}
-                required
-                className="w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              />
-            </div>
+
+              {/* Show gender only if age > 25 */}
+              {form.age > 25 && (
+                <select
+                  name="gender"
+                  value={form.gender}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              )}
+            </>
           )}
+
           <input
             type="email"
             name="email"

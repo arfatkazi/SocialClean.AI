@@ -1,6 +1,7 @@
 import User from "../models/userSchema.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 
 const generateToken = (id, role, subscription) =>
@@ -10,14 +11,26 @@ const generateToken = (id, role, subscription) =>
 
 export const signup = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, age, gender } = req.body;
 
-    // Check if user already exists
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    // Create user (password auto-hashed by schema)
-    user = await User.create({ firstName, lastName, email, password });
+    let finalGender;
+    if (age >= 18 && age <= 25) {
+      finalGender = "adult";
+    } else {
+      finalGender = gender;
+    }
+
+    user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      age,
+      gender: finalGender,
+    });
 
     const {
       password: _,
