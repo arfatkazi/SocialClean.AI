@@ -11,7 +11,7 @@ export default function ResetPassword() {
     e.preventDefault();
 
     try {
-      const res = await fetch(
+      const response = await fetch(
         `http://localhost:5000/api/auth/reset-password/${token}`,
         {
           method: "POST",
@@ -19,39 +19,40 @@ export default function ResetPassword() {
           body: JSON.stringify({ password }),
         }
       );
+      const data = await response.json();
 
-      const data = await res.json();
-      setMessage(data.message);
+      setMessage(data.message || "Password reset successful");
 
-      if (res.ok) {
-        setTimeout(() => navigate("/login"), 2000); // redirect after success
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setTimeout(() => navigate("/login"), 1500); // redirect to login
       }
-    } catch (err) {
-      setMessage("Something went wrong. Try again.");
+    } catch (error) {
+      setMessage("Something went wrong");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
-        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-4">
+        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
           🔑 Reset Password
         </h2>
         <p className="text-center text-gray-500 mb-6 text-sm">
-          Enter a new password to secure your account.
+          Enter your new password.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="password"
-            placeholder="Enter new password"
+            placeholder="New Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
           />
 
-          <button className="relative w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-semibold shadow-lg overflow-hidden group">
+          <button className="relative w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl font-semibold shadow-lg overflow-hidden group">
             <span className="relative z-10">Reset Password</span>
             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-in-out"></span>
           </button>
@@ -60,9 +61,9 @@ export default function ResetPassword() {
         {message && (
           <p
             className={`mt-4 text-center ${
-              message.toLowerCase().includes("success")
-                ? "text-green-600"
-                : "text-red-500"
+              message.toLowerCase().includes("error")
+                ? "text-red-500"
+                : "text-green-600"
             }`}
           >
             {message}

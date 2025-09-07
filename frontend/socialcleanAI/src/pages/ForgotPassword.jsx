@@ -3,19 +3,28 @@ import { useState } from "react";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [resetLink, setResetLink] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(
-      "http://localhost:5000/api/auth/forgot-password",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      }
-    );
-    const data = await response.json();
-    setMessage(data.message || data.error);
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
+      const data = await response.json();
+
+      setMessage(data.message || "Check console for reset link");
+      setResetLink(data.resetURL); // frontend can show the link for testing
+      console.log("Reset URL (for testing):", data.resetURL);
+    } catch (error) {
+      setMessage("Something went wrong");
+    }
   };
 
   return (
@@ -53,6 +62,12 @@ export default function ForgotPassword() {
             }`}
           >
             {message}
+          </p>
+        )}
+
+        {resetLink && (
+          <p className="mt-4 text-center text-blue-600 break-all">
+            Reset Link: <a href={resetLink}>{resetLink}</a>
           </p>
         )}
       </div>
