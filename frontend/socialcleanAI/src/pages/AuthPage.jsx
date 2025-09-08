@@ -37,10 +37,6 @@ export default function AuthPage() {
         alert("You must be at least 18 years old to sign up.");
         return;
       }
-
-      if (age >= 18 && age <= 25) {
-        form.gender = "adult"; // auto-assign
-      }
     }
 
     const url = isLogin
@@ -66,7 +62,6 @@ export default function AuthPage() {
     window.location.href = "http://localhost:5000/api/auth/google";
   };
 
-  // ✅ Better: redirect instead of toggling state
   const toggleAuthMode = () => {
     navigate(isLogin ? "/signup" : "/login");
   };
@@ -120,9 +115,18 @@ export default function AuthPage() {
               />
 
               {form.age >= 18 && form.age <= 25 && (
-                <p className="text-green-600 text-sm font-semibold">
-                  Category: Adult
-                </p>
+                <select
+                  name="gender"
+                  value={form.gender}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="adult">Adult</option>
+                  <option value="female">Female</option>
+                </select>
               )}
 
               {form.age > 25 && (

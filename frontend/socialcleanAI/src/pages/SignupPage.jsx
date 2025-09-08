@@ -19,10 +19,8 @@ export default function SignupPage() {
           Signup to get started with us ✨
         </p>
 
-        {/* Auth Form */}
         <AuthForm isLogin={false} navigate={navigate} />
 
-        {/* Switch to Login */}
         <p className="mt-4 text-sm text-center">
           Already have an account?{" "}
           <a href="/login" className="text-blue-600 hover:underline">
@@ -30,14 +28,12 @@ export default function SignupPage() {
           </a>
         </p>
 
-        {/* Divider */}
         <div className="flex items-center my-6">
           <hr className="flex-grow border-gray-300" />
           <span className="mx-2 text-gray-400 text-sm">OR</span>
           <hr className="flex-grow border-gray-300" />
         </div>
 
-        {/* Google Button */}
         <GoogleButton onClick={handleGoogleAuth} />
       </div>
     </div>
