@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AuthPage() {
+  const location = useLocation();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
@@ -14,12 +15,34 @@ export default function AuthPage() {
   });
   const navigate = useNavigate();
 
+  // ✅ Detect current route and set auth mode
+  useEffect(() => {
+    if (location.pathname === "/signup") {
+      setIsLogin(false);
+    } else {
+      setIsLogin(true);
+    }
+  }, [location.pathname]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isLogin) {
+      const age = parseInt(form.age, 10);
+      if (age < 18) {
+        alert("You must be at least 18 years old to sign up.");
+        return;
+      }
+
+      if (age >= 18 && age <= 25) {
+        form.gender = "adult"; // auto-assign
+      }
+    }
+
     const url = isLogin
       ? "http://localhost:5000/api/auth/login"
       : "http://localhost:5000/api/auth/signup";
@@ -43,20 +66,13 @@ export default function AuthPage() {
     window.location.href = "http://localhost:5000/api/auth/google";
   };
 
+  // ✅ Better: redirect instead of toggling state
   const toggleAuthMode = () => {
-    setIsLogin(!isLogin);
-    setForm({
-      email: "",
-      password: "",
-      firstName: "",
-      lastName: "",
-      age: "",
-      gender: "",
-    });
+    navigate(isLogin ? "/signup" : "/login");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r bg-black px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
         <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
           {isLogin
@@ -93,7 +109,6 @@ export default function AuthPage() {
                 />
               </div>
 
-              {/* Age Input */}
               <input
                 type="number"
                 name="age"
@@ -104,7 +119,12 @@ export default function AuthPage() {
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               />
 
-              {/* Show gender only if age > 25 */}
+              {form.age >= 18 && form.age <= 25 && (
+                <p className="text-green-600 text-sm font-semibold">
+                  Category: Adult
+                </p>
+              )}
+
               {form.age > 25 && (
                 <select
                   name="gender"
@@ -117,6 +137,12 @@ export default function AuthPage() {
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
+              )}
+
+              {form.age && form.age < 18 && (
+                <p className="text-red-600 text-sm font-semibold">
+                  You must be at least 18 years old to sign up.
+                </p>
               )}
             </>
           )}

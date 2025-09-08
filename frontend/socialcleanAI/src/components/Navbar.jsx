@@ -1,69 +1,77 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
-    <nav
-      className={`sticky top-0 z-50 px-6 py-4 flex justify-between items-center transition-shadow duration-300 ${
-        scrolled ? "bg-gray-900 shadow-xl" : "bg-gray-900"
-      }`}
-    >
-      <div className="text-2xl font-bold text-white tracking-wide hover:text-gray-300 transition-colors cursor-pointer">
-        SocialCleanAI
-      </div>
-
-      <div className="hidden md:flex space-x-8">
-        <Link
-          to="/"
-          className="relative text-gray-300 hover:text-white font-medium transition-colors after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all hover:after:w-full"
-        >
-          Auth
+    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="text-xl font-bold text-gray-900">
+          SocialCleanAI
         </Link>
-        <Link
-          to="/dashboard"
-          className="relative text-gray-300 hover:text-white font-medium transition-colors after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all hover:after:w-full"
-        >
-          Dashboard
-        </Link>
-      </div>
 
-      <motion.div
-        className="md:hidden flex flex-col justify-between w-6 h-5 cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
-        whileTap={{ scale: 0.9 }}
-      >
-        <span className="block h-0.5 w-full bg-white"></span>
-        <span className="block h-0.5 w-full bg-white"></span>
-        <span className="block h-0.5 w-full bg-white"></span>
-      </motion.div>
-
-      {isOpen && (
-        <div className="absolute top-16 right-6 bg-gray-800 text-white p-4 rounded-lg shadow-lg md:hidden flex flex-col gap-4">
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center space-x-8">
           <Link
-            to="/"
-            className="hover:text-gray-300"
-            onClick={() => setIsOpen(false)}
+            to="/signup"
+            className="px-4 py-2 rounded-full bg-blue-600 text-white font-medium hover:bg-black transition-colors duration-300"
           >
-            Auth
+            Sign up
           </Link>
           <Link
             to="/dashboard"
-            className="hover:text-gray-300"
+            className="px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-black hover:text-white transition-colors duration-300"
+          >
+            Dashboard
+          </Link>
+        </div>
+
+        {/* Desktop Actions */}
+        <div className="hidden md:flex items-center space-x-4">
+          <Link
+            to="/login"
+            className="px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-black hover:text-white transition-colors duration-300"
+          >
+            Log in
+          </Link>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden flex flex-col space-y-1 focus:outline-none"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className="w-6 h-0.5 bg-gray-800"></span>
+          <span className="w-6 h-0.5 bg-gray-800"></span>
+          <span className="w-6 h-0.5 bg-gray-800"></span>
+        </button>
+      </div>
+
+      {isOpen && (
+        <div className="md:hidden bg-white/90 backdrop-blur-lg border-t border-gray-200 p-4 space-y-4">
+          <Link
+            to="/signup"
+            className="block text-center px-4 py-2 rounded-full bg-blue-600 text-white font-medium hover:bg-black transition-colors duration-300"
+            onClick={() => setIsOpen(false)}
+          >
+            Sign up
+          </Link>
+          <Link
+            to="/dashboard"
+            className="block px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-black hover:text-white transition-colors duration-300"
             onClick={() => setIsOpen(false)}
           >
             Dashboard
+          </Link>
+          <hr />
+          <Link
+            to="/login"
+            className="block px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-black hover:text-white transition-colors duration-300"
+            onClick={() => setIsOpen(false)}
+          >
+            Log in
           </Link>
         </div>
       )}
