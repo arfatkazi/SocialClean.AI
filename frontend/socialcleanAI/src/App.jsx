@@ -21,7 +21,10 @@ export default function App() {
     <>
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/"
+          element={<HomePage darkMode={darkMode} setDarkMode={setDarkMode} />}
+        />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<AuthPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
