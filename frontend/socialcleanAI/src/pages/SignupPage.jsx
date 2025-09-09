@@ -10,7 +10,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black px-4">
+    <div className="min-h-screen flex items-center justify-center dark:bg-gray-900 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
         <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
           Create Your SocialCleanAI Account

@@ -8,7 +8,7 @@ export default function HomePage() {
       <section className="flex-1 flex items-center justify-center bg-gradient-to-b from-indigo-50 to-white dark:from-gray-800 dark:to-gray-900 px-6">
         <div className="text-center max-w-3xl">
           <motion.h1
-            className="text-4xl md:text-6xl font-extrabold mb-6 mt-52"
+            className="text-4xl md:text-6xl font-extrabold mb-6 mt-32"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
