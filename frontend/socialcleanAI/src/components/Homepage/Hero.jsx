@@ -1,21 +1,13 @@
 import { motion } from "framer-motion";
 import React from "react";
-import { Shield, Sparkles, Zap, BarChart } from "lucide-react";
 
-const Hero = ({ darkMode, setDarkMode }) => {
+const Hero = () => {
   return (
     <>
-      {/* Hero Section */}
-      <section
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        className="flex-1 flex items-center justify-center
-                   bg-white dark:bg-gray-900
-                   px-6 transition-colors duration-300"
-      >
+      <section className="flex-1 flex items-center justify-center px-6 transition-colors duration-300 bg-white dark:bg-gray-900">
         <div className="text-center max-w-3xl">
           <motion.h1
-            className="text-4xl md:text-6xl font-extrabold mb-15 mt-25"
+            className="text-4xl md:text-6xl font-extrabold mb-15 mt-25 text-gray-900 dark:text-white"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}

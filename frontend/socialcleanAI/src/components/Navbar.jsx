@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Moon, Sun } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
-export default function Navbar({ darkMode, setDarkMode }) {
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { darkMode, toggleDarkMode } = useTheme();
 
   return (
     <nav className="sticky top-5 z-50">
-      <div
-        className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center 
-                      bg-white/30 dark:bg-gray-900/70 backdrop-blur-lg border border-white/20 dark:border-gray-700 rounded-2xl  transition-colors duration-500"
-      >
+      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center bg-white/30 dark:bg-gray-900/70 backdrop-blur-lg border border-white/20 dark:border-gray-700 rounded-2xl transition-colors duration-500">
         <Link
           to="/"
           className="text-3xl font-bold text-gray-900 dark:text-white"
@@ -18,9 +17,10 @@ export default function Navbar({ darkMode, setDarkMode }) {
           SocialCleanAI
         </Link>
 
+        {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-4">
           <button
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={toggleDarkMode}
             className="p-2 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition"
             title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
@@ -45,27 +45,35 @@ export default function Navbar({ darkMode, setDarkMode }) {
           </Link>
         </div>
 
+        {/* Mobile Menu Button */}
         <button
           className="md:hidden flex flex-col space-y-1 focus:outline-none"
           onClick={() => setIsOpen(!isOpen)}
         >
           <span
-            className={`w-6 h-0.5 ${darkMode ? "bg-white" : "bg-gray-800"}`}
+            className={`w-6 h-0.5 ${
+              darkMode ? "bg-white" : "bg-gray-800"
+            } transition-colors duration-300`}
           ></span>
           <span
-            className={`w-6 h-0.5 ${darkMode ? "bg-white" : "bg-gray-800"}`}
+            className={`w-6 h-0.5 ${
+              darkMode ? "bg-white" : "bg-gray-800"
+            } transition-colors duration-300`}
           ></span>
           <span
-            className={`w-6 h-0.5 ${darkMode ? "bg-white" : "bg-gray-800"}`}
+            className={`w-6 h-0.5 ${
+              darkMode ? "bg-white" : "bg-gray-800"
+            } transition-colors duration-300`}
           ></span>
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white/40 dark:bg-gray-900/80 backdrop-blur-md border-t border-white/20 dark:border-gray-700 shadow-lg rounded-b-2xl p-4 space-y-4 transition-all duration-500 mt-3">
           <button
             onClick={() => {
-              setDarkMode(!darkMode);
+              toggleDarkMode();
               setIsOpen(false);
             }}
             className="block w-full text-center px-4 py-2 font-medium rounded-lg transition-colors duration-300 text-black dark:text-white hover:bg-black hover:text-white"
