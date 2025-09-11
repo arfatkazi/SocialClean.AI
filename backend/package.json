@@ -5,8 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon backend/src/server.js",
-    "start": "node backend/src/server.js"
+    "dev": "nodemon backend/server.js",
+    "start": "node backend/server.js"
   },
   "dependencies": {
     "@arcjet/inspect": "^1.0.0-beta.11",

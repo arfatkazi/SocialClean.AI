@@ -1,14 +1,14 @@
+import dotenv from "dotenv";
+dotenv.config();
 import arcjet, { shield, detectBot, tokenBucket } from "@arcjet/node";
 import { isSpoofedBot } from "@arcjet/inspect";
 import express from "express";
-import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
+import connectDB from "./src/config/db.js";
+import authRoutes from "./src/routes/authRoutes.js";
 
-dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
