@@ -34,12 +34,43 @@ const Feature = () => {
     },
   ];
 
+  // Word animation for heading
+  const headingWords = ["Powerful", "Features"];
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.25 },
+    },
+  };
+  const wordVariant = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
+
   return (
     <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 transition-colors duration-300">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-10 sm:mb-12 text-gray-900 dark:text-white">
-          Powerful Features
-        </h2>
+        {/* Animated heading */}
+        <motion.h2
+          className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-10 sm:mb-12 text-gray-900 dark:text-white flex justify-center gap-3 flex-wrap"
+          variants={containerVariant}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {headingWords.map((word, i) => (
+            <motion.span key={i} variants={wordVariant}>
+              {word}
+            </motion.span>
+          ))}
+        </motion.h2>
+
+        {/* Features grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           {features.map((item, i) => (
             <motion.div
