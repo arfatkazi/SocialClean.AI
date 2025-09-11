@@ -5,13 +5,14 @@ const Hero = () => {
   const headingWords = ["Clean", "Your", "Digital", "Footprint", "with", "AI"];
 
   return (
-    <section className="flex-1 flex items-center justify-center px-10 py-24 transition-colors duration-300">
+    <section className="flex-1 flex items-center justify-center px-4 sm:px-6 md:px-10 py-16 md:py-24 transition-colors duration-300 mt-40">
       <div className="text-center max-w-4xl">
-        <h1 className="text-5xl md:text-8xl font-extrabold mb-8 text-gray-900 dark:text-gray-100 mt-35">
+        {/* Animated Heading */}
+        <h1 className="text-3xl sm:text-5xl md:text-8xl font-extrabold mb-6 md:mb-8 text-gray-900 dark:text-gray-100 leading-snug sm:leading-tight md:leading-[1.1]">
           {headingWords.map((word, index) => (
             <motion.span
               key={index}
-              className={`inline-block mr-3 ${
+              className={`inline-block mr-2 sm:mr-3 ${
                 word === "AI" ? "text-indigo-600" : ""
               }`}
               initial={{ opacity: 0, y: 60, scale: 0.8 }}
@@ -29,7 +30,7 @@ const Hero = () => {
 
         {/* Subtext */}
         <motion.p
-          className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto"
+          className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 md:mb-10 max-w-xl sm:max-w-2xl mx-auto px-2"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: headingWords.length * 0.25 + 0.2, duration: 1 }}
@@ -40,7 +41,7 @@ const Hero = () => {
 
         {/* Buttons */}
         <motion.div
-          className="flex flex-col md:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -51,14 +52,14 @@ const Hero = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 rounded-full bg-indigo-600 text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300"
+            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-indigo-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
           >
             Get Started
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 rounded-full border border-indigo-600 text-indigo-600 font-semibold hover:bg-indigo-50 transition-all duration-300"
+            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-indigo-600 text-indigo-600 font-semibold hover:bg-indigo-50 transition-all duration-300 text-sm sm:text-base"
           >
             Learn More
           </motion.button>

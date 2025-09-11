@@ -3,7 +3,6 @@ import Works from "../components/Homepage/Works.jsx";
 import Feature from "../components/Homepage/Feature.jsx";
 import Security from "../components/Homepage/Security.jsx";
 import Cta from "../components/Homepage/Cta.jsx";
-import Footer from "../components/Homepage/Footer.jsx";
 
 export default function HomePage() {
   return (
@@ -13,7 +12,6 @@ export default function HomePage() {
       <Feature />
       <Security />
       <Cta />
-      <Footer />
     </div>
   );
 }

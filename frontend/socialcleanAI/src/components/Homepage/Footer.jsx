@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 const Footer = () => {
   return (
     <motion.footer
-      className="py-8 bg-gray-900 text-gray-300 text-center text-sm rounded-t-2xl shadow-inner"
+      className="py-10 mt-10 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-center text-sm rounded-t-2xl shadow-inner"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -20,7 +20,7 @@ const Footer = () => {
             <motion.a
               key={index}
               href="#"
-              className="relative text-gray-300 hover:text-white transition-colors duration-200 group"
+              className="relative text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white transition-colors duration-200 group"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
