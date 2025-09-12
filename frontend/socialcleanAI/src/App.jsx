@@ -1,18 +1,18 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Homepage/Footer";
+
+// Pages
 import HomePage from "./pages/HomePage";
+import About from "./pages/About";
+import Scan from "./pages/Scan";
+import Dashboard from "./pages/Dashboard";
+import Contact from "./pages/Contact";
 import AuthPage from "./pages/AuthPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import Dashboard from "./pages/Dashboard";
-import Footer from "./components/Homepage/Footer";
-import Contact from "./pages/Contact";
 
-// New pages
-import About from "./pages/About"; // create About.js
-import Scan from "./pages/Scan"; // create Scan.js
-
-// Reports Placeholder
+// Reports placeholder page
 function Reports() {
   return (
     <section className="py-16 px-6 text-center">
@@ -39,22 +39,22 @@ function Reports() {
 
 export default function App() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300 pb-5">
-      {/* Navbar always on top */}
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+      {/* Navbar */}
       <Navbar />
 
-      {/* Main content fills remaining space */}
+      {/* Main content */}
       <main className="flex-grow">
         <Routes>
-          {/* Core Pages */}
+          {/* Core pages */}
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/scan" element={<Scan />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* Auth Pages */}
+          {/* Auth pages */}
           <Route path="/login" element={<AuthPage />} />
           <Route path="/signup" element={<AuthPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -62,7 +62,7 @@ export default function App() {
         </Routes>
       </main>
 
-      {/* Footer stays at the bottom */}
+      {/* Footer */}
       <Footer />
     </div>
   );
