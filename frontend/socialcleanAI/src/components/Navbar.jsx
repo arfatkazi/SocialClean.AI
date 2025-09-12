@@ -13,11 +13,6 @@ export default function Navbar() {
     { to: "/contact", label: "Contact" },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } },
-  };
-
   const itemVariants = {
     hidden: { opacity: 0, y: -20 },
     show: {
@@ -30,9 +25,9 @@ export default function Navbar() {
   return (
     <nav className="sticky top-5 z-50">
       <div
-        className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between
-                    bg-white/30 dark:bg-gray-800/40 backdrop-blur-lg border border-white/30 dark:border-gray-400/40
-                    rounded-2xl transition-colors duration-500 shadow-md"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between
+                      bg-white/30 dark:bg-gray-800/40 backdrop-blur-lg border border-white/30 dark:border-gray-400/40
+                      rounded-2xl transition-colors duration-500 shadow-md"
       >
         {/* Logo */}
         <motion.div
@@ -49,18 +44,15 @@ export default function Navbar() {
           </Link>
         </motion.div>
 
-        {/* Center Links */}
-        <motion.div
-          className="hidden md:flex items-center space-x-10 mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
+        {/* Desktop Links */}
+        <div className="hidden md:flex flex-1 justify-center space-x-10">
           {navLinks.map((link) => (
             <motion.div
               key={link.to}
               variants={itemVariants}
-              whileHover={{ scale: 1.03, color: "#6366f1" }}
+              initial="hidden"
+              animate="show"
+              whileHover={{ scale: 1.05, color: "#6366f1" }}
             >
               <Link
                 className="text-gray-900 dark:text-white font-medium transition-all duration-200"
@@ -70,10 +62,10 @@ export default function Navbar() {
               </Link>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Auth Buttons */}
-        <div className="hidden md:flex space-x-4">
+        {/* Desktop Auth Buttons */}
+        <div className="hidden md:flex flex-shrink-0 space-x-4">
           <motion.div
             whileHover={{
               scale: 1.05,
@@ -124,9 +116,10 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ type: "spring", stiffness: 180, damping: 20 }}
             className="md:hidden bg-white/40 dark:bg-gray-800/60 backdrop-blur-md
-                        border-t border-white/20 dark:border-gray-700/40 shadow-lg rounded-b-2xl
-                        p-4 space-y-4 mt-3"
+                       border-t border-white/20 dark:border-gray-700/40 shadow-lg rounded-b-2xl
+                       p-4 space-y-4 mt-3"
           >
+            {/* Mobile Links */}
             {navLinks.map((link, i) => (
               <motion.div
                 key={link.to}
@@ -151,12 +144,7 @@ export default function Navbar() {
             ))}
 
             {/* Mobile Auth Buttons */}
-            <motion.div
-              className="flex flex-col space-y-3"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", stiffness: 180, damping: 20 }}
-            >
+            <div className="flex flex-col space-y-3 mt-2">
               <motion.div
                 whileHover={{
                   scale: 1.05,
@@ -187,7 +175,7 @@ export default function Navbar() {
                   Log in
                 </Link>
               </motion.div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
