@@ -2,27 +2,33 @@ import User from "../models/userSchema.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
 
+// Generate JWT
 const generateToken = (id, role, subscription) =>
   jwt.sign({ id, role, subscription }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
 
+/**
+ * SIGNUP
+ */
 export const signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password, age, gender } = req.body;
 
+    // check if user already exists
     let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ message: "User already exists" });
-
-    let finalGender;
-    if (age >= 18 && age <= 25) {
-      finalGender = "adult";
-    } else {
-      finalGender = gender;
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
     }
 
+    // Allow "adult" only if in valid range
+    let finalGender = gender;
+    if (age >= 18 && age <= 25) {
+      finalGender = "adult";
+    }
+
+    // create user
     user = await User.create({
       firstName,
       lastName,
@@ -32,6 +38,7 @@ export const signup = async (req, res) => {
       gender: finalGender,
     });
 
+    // strip sensitive fields
     const {
       password: _,
       resetPasswordToken,
@@ -45,21 +52,31 @@ export const signup = async (req, res) => {
       user: userData,
     });
   } catch (error) {
+    console.error("❌ Signup error:", error);
     res.status(500).json({ error: error.message });
   }
 };
 
+/**
+ * LOGIN
+ */
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // check if user exists
     const user = await User.findOne({ email });
-    if (!user)
+    if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
+    }
 
+    // check password
     const isMatch = await user.matchPassword(password);
-    if (!isMatch)
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
+    }
 
+    // strip sensitive fields
     const {
       password: _,
       resetPasswordToken,
@@ -73,10 +90,14 @@ export const login = async (req, res) => {
       user: userData,
     });
   } catch (error) {
+    console.error("❌ Login error:", error);
     res.status(500).json({ error: error.message });
   }
 };
 
+/**
+ * SOCIAL LOGIN
+ */
 export const socialLogin = async (req, res) => {
   try {
     const { provider, providerId, firstName, lastName, email, profilePic } =
@@ -88,11 +109,11 @@ export const socialLogin = async (req, res) => {
         .json({ message: "Provider and providerId are required" });
     }
 
-    // Check if user exists
+    // check if user exists
     let user = await User.findOne({ provider, providerId });
 
     if (!user) {
-      // Create new social user
+      // create new social user
       user = await User.create({
         firstName,
         lastName,
@@ -104,6 +125,7 @@ export const socialLogin = async (req, res) => {
       });
     }
 
+    // strip sensitive fields
     const {
       password: _,
       resetPasswordToken,
@@ -117,21 +139,30 @@ export const socialLogin = async (req, res) => {
       user: userData,
     });
   } catch (error) {
+    console.error("❌ Social login error:", error);
     res.status(500).json({ error: error.message });
   }
 };
 
+/**
+ * FORGOT PASSWORD
+ */
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
+
     user.resetPasswordToken = crypto
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
+
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 min
     await user.save();
 
@@ -142,10 +173,14 @@ export const forgotPassword = async (req, res) => {
       resetURL: resetUrl,
     });
   } catch (error) {
+    console.error("❌ Forgot password error:", error);
     res.status(500).json({ error: error.message });
   }
 };
 
+/**
+ * RESET PASSWORD
+ */
 export const resetPassword = async (req, res) => {
   try {
     const resetPasswordToken = crypto
@@ -158,20 +193,21 @@ export const resetPassword = async (req, res) => {
       resetPasswordExpire: { $gt: Date.now() },
     });
 
-    if (!user)
+    if (!user) {
       return res.status(400).json({ message: "Invalid or expired token" });
+    }
 
     user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
 
-    // Optionally, auto-login user after password reset
     res.status(200).json({
       message: "Password reset successful",
       token: generateToken(user._id, user.role, user.subscription.type),
     });
   } catch (error) {
+    console.error("❌ Reset password error:", error);
     res.status(500).json({ error: error.message });
   }
 };

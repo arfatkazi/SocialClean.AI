@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Compound index for social logins
+// Compound index for social logins (safe for empty values)
 userSchema.index(
   { provider: 1, providerId: 1 },
   { unique: true, sparse: true }
@@ -79,9 +79,9 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Age-based gender logic
+// Age-based gender logic (safe check for undefined)
 userSchema.pre("save", function (next) {
-  if (this.age >= 18 && this.age <= 25) {
+  if (this.age && this.age >= 18 && this.age <= 25) {
     this.gender = "adult";
   }
   next();
