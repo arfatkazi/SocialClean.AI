@@ -12,7 +12,7 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative flex flex-1 items-center justify-center px-6 md:px-16 py-32 min-h-[90vh] overflow-hidden">
+    <section className="relative flex flex-col items-center justify-start md:justify-center px-6 md:px-16 py-20 md:py-32 min-h-[80vh] md:min-h-[90vh] overflow-hidden">
       {/* 🔹 Video Background */}
       <motion.video
         className="absolute top-0 left-0 w-full h-full object-cover"
@@ -20,17 +20,17 @@ const Hero = () => {
         loop
         muted
         playsInline
-        animate={{ y: [0, -10, 0] }}
+        animate={{ y: [0, -8, 0], scale: [1, 1.02, 1] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       >
-        <source src="/AI_earth.mp4" type="video/mp4" />
+        <source src="/AI_earth.webm" type="video/webm" />
       </motion.video>
 
       {/* 🔹 Overlay */}
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* 🔹 Hero Content */}
-      <div className="relative z-20 text-center max-w-4xl">
+      <div className="relative z-20 text-center max-w-4xl mt-10 md:mt-0">
         {/* Animated Heading */}
         <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-6 text-white leading-snug sm:leading-tight md:leading-[1.1]">
           {headingWords.map((word, index) => (
@@ -38,7 +38,7 @@ const Hero = () => {
               key={index}
               className={`inline-block mr-2 sm:mr-3 ${
                 word.includes("AI")
-                  ? "text-indigo-400 drop-shadow-[0_0_15px_rgba(99,102,241,0.8)]"
+                  ? "text-indigo-400 drop-shadow-[0_0_20px_rgba(99,102,241,0.9)]"
                   : ""
               }`}
               initial={{ opacity: 0, y: 60, scale: 0.8 }}
@@ -67,7 +67,7 @@ const Hero = () => {
 
         {/* Buttons */}
         <motion.div
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between max-w-xs mx-auto"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-xs mx-auto"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -92,7 +92,7 @@ const Hero = () => {
               scale: 1.08,
               backgroundColor: "#ffffff",
               color: "#4f46e5",
-              boxShadow: "0px 8px 16px rgba(0,0,0,0.2)",
+              boxShadow: "0px 8px 20px rgba(0,0,0,0.3)",
             }}
             whileTap={{ scale: 0.95 }}
             className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-indigo-600 text-indigo-400 font-semibold transition-all duration-300"
