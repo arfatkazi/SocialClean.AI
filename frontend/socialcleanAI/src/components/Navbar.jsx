@@ -40,7 +40,7 @@ export default function Navbar() {
             className="text-3xl font-bold text-gray-900 dark:text-white drop-shadow-lg"
             to="/"
           >
-            SocialCleanAI
+            SocialClean.AI
           </Link>
         </motion.div>
 
