@@ -33,3 +33,4 @@ Thumbs.db
 # Ignore text/notes only if you don’t want to upload them
 # *.txt
 "backend/src/.env" 
+"frontend/socialcleanAI/public/AI_earth.mp4" 
