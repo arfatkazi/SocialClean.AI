@@ -4,12 +4,16 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [resetLink, setResetLink] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
+    setResetLink("");
 
     try {
-      const response = await fetch(
+      const res = await fetch(
         "http://localhost:5000/api/auth/forgot-password",
         {
           method: "POST",
@@ -17,13 +21,21 @@ export default function ForgotPassword() {
           body: JSON.stringify({ email }),
         }
       );
-      const data = await response.json();
 
-      setMessage(data.message || "Check console for reset link");
-      setResetLink(data.resetURL); // frontend can show the link for testing
-      console.log("Reset URL (for testing):", data.resetURL);
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage(data.message || "Reset link sent successfully!");
+        setResetLink(data.resetURL); // for testing/demo purposes
+        console.log("Reset URL:", data.resetURL);
+      } else {
+        setMessage(data.message || "Something went wrong. Try again.");
+      }
     } catch (error) {
-      setMessage("Something went wrong");
+      console.error(error);
+      setMessage("Server error, please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,16 +59,22 @@ export default function ForgotPassword() {
             className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
           />
 
-          <button className="relative w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl font-semibold shadow-lg overflow-hidden group">
-            <span className="relative z-10">Send Reset Link</span>
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-in-out"></span>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full relative bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 ${
+              loading ? "opacity-60 cursor-not-allowed" : "hover:shadow-xl"
+            }`}
+          >
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 
         {message && (
           <p
             className={`mt-4 text-center ${
-              message.toLowerCase().includes("error")
+              message.toLowerCase().includes("error") ||
+              message.toLowerCase().includes("wrong")
                 ? "text-red-500"
                 : "text-green-600"
             }`}
@@ -67,7 +85,10 @@ export default function ForgotPassword() {
 
         {resetLink && (
           <p className="mt-4 text-center text-blue-600 break-all">
-            Reset Link: <a href={resetLink}>{resetLink}</a>
+            Reset Link:{" "}
+            <a href={resetLink} target="_blank" rel="noopener noreferrer">
+              {resetLink}
+            </a>
           </p>
         )}
       </div>

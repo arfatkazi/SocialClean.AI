@@ -6,12 +6,26 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const passwordRegex =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
+
+    if (!passwordRegex.test(password)) {
+      setMessage(
+        "Password must be at least 6 characters, include 1 letter, 1 number, and 1 special character."
+      );
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      const response = await fetch(
+      const res = await fetch(
         `http://localhost:5000/api/auth/reset-password/${token}`,
         {
           method: "PUT",
@@ -19,16 +33,21 @@ export default function ResetPassword() {
           body: JSON.stringify({ password }),
         }
       );
-      const data = await response.json();
 
-      setMessage(data.message || "Password reset successful");
+      const data = await res.json();
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        setTimeout(() => navigate("/login"), 1500); // redirect to login
+      if (res.ok) {
+        setMessage(data.message || "Password reset successful!");
+        if (data.token) localStorage.setItem("token", data.token);
+        setTimeout(() => navigate("/login"), 1500); // redirect after success
+      } else {
+        setMessage(data.message || "Something went wrong. Try again.");
       }
     } catch (error) {
-      setMessage("Something went wrong");
+      console.error(error);
+      setMessage("Server error, please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,9 +71,14 @@ export default function ResetPassword() {
             className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
           />
 
-          <button className="relative w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl font-semibold shadow-lg overflow-hidden group">
-            <span className="relative z-10">Reset Password</span>
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-in-out"></span>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full relative bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 ${
+              loading ? "opacity-60 cursor-not-allowed" : "hover:shadow-xl"
+            }`}
+          >
+            {loading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
 

@@ -3,7 +3,6 @@ import { protect } from "../middleware/authMiddleware.js";
 import {
   signup,
   login,
-  socialLogin,
   forgotPassword,
   resetPassword,
 } from "../controllers/authController.js";
@@ -14,7 +13,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 
 // Social login
-router.post("/social-login", socialLogin);
+// router.post("/social-login", socialLogin);
 
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:token", resetPassword);

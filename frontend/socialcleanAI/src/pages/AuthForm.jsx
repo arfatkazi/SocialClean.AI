@@ -1,151 +1,182 @@
 import { useState } from "react";
-import InputField from "./InputField";
 
 export default function AuthForm({ isLogin, navigate }) {
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
-    email: "",
-    password: "",
     firstName: "",
     lastName: "",
     age: "",
     gender: "",
+    country: "",
+    city: "",
+    email: "",
+    password: "",
   });
+  const [loginError, setLoginError] = useState(false);
 
-  const handleChange = (e) =>
+  const passwordRegex =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    if (isLogin) setLoginError(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isLogin) {
-      const age = parseInt(form.age, 10);
-      if (age < 18) {
-        alert("You must be at least 18 years old to sign up.");
-        return;
-      }
-      if (age >= 18 && age <= 25) {
-        form.gender = "adult"; // auto-assign
-      }
+      const ageNum = parseInt(form.age, 10);
+      if (isNaN(ageNum) || ageNum < 18)
+        return alert("You must be at least 18 years old to sign up.");
+      if (!form.country) return alert("Country is required.");
+      if (!passwordRegex.test(form.password))
+        return alert(
+          "Password must be at least 6 characters, include 1 letter, 1 number, and 1 special character."
+        );
+      if (!form.gender) form.gender = "other"; // default to "other"
     }
 
     const url = isLogin
       ? "http://localhost:5000/api/auth/login"
       : "http://localhost:5000/api/auth/signup";
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    const data = await response.json();
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      navigate("/dashboard");
-    } else {
-      alert(data.message || "Error");
+      const data = await response.json();
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        navigate("/dashboard");
+      } else {
+        if (isLogin) setLoginError(true);
+        alert(data.message || "Error occurred");
+      }
+    } catch (error) {
+      console.error("Server error:", error);
+      alert("Server error, please try again later.");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Signup fields */}
       {!isLogin && (
         <>
           <div className="flex gap-3">
-            <InputField
+            <input
               type="text"
               name="firstName"
               placeholder="First Name"
               value={form.firstName}
               onChange={handleChange}
               required
+              className="w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             />
-            <InputField
+            <input
               type="text"
               name="lastName"
               placeholder="Last Name"
               value={form.lastName}
               onChange={handleChange}
               required
+              className="w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
-          <InputField
+          <input
             type="number"
             name="age"
             placeholder="Age"
             value={form.age}
             onChange={handleChange}
             required
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           />
 
-          {/* Age Logic */}
-          {form.age >= 18 && form.age <= 25 && (
-            <p className="text-green-600 text-sm font-semibold">
-              Category: Adult
-            </p>
-          )}
+          <select
+            name="gender"
+            value={form.gender}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
 
-          {form.age > 25 && (
-            <select
-              name="gender"
-              value={form.gender}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          )}
-
-          {form.age && form.age < 18 && (
-            <p className="text-red-600 text-sm font-semibold">
-              You must be at least 18 years old to sign up.
-            </p>
-          )}
+          <input
+            type="text"
+            name="country"
+            placeholder="Country"
+            value={form.country}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
+          <input
+            type="text"
+            name="city"
+            placeholder="City (optional)"
+            value={form.city}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
         </>
       )}
 
-      {/* Email */}
-      <InputField
+      <input
         type="email"
         name="email"
         placeholder="Email"
         value={form.email}
         onChange={handleChange}
         required
+        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
 
-      {/* Password */}
       <div className="relative">
-        <InputField
+        <input
           type={showPassword ? "text" : "password"}
           name="password"
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
           required
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
         />
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-2 text-m"
+          className="absolute right-3 top-2 text-m transition-transform"
         >
           {showPassword ? "🙈" : "👀"}
         </button>
       </div>
 
-      {/* Submit */}
+      {isLogin && loginError && (
+        <div className="text-right">
+          <button
+            type="button"
+            onClick={() => navigate("/forgot-password")}
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Forgot Password?
+          </button>
+        </div>
+      )}
+
       <button
         type="submit"
         className="relative w-full bg-gradient-to-r from-blue-600 to-indigo-500 text-white py-2 rounded-lg font-semibold shadow-md overflow-hidden group hover:shadow-xl transition-all duration-500"
       >
         <span className="relative z-10">{isLogin ? "Login" : "Signup"}</span>
-        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-in-out"></span>
       </button>
     </form>
   );
