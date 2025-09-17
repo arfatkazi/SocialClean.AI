@@ -14,7 +14,20 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/.+\@.+\..+/, "Please fill a valid email address"],
     },
-    password: { type: String, required: true },
+
+    // Password (local accounts only)
+    password: {
+      type: String,
+      required: function () {
+        return this.provider === "local"; // only required for local accounts
+      },
+      minlength: 6,
+      match: [
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+        "Password must be at least 6 characters long and include at least 1 letter, 1 number, and 1 special character",
+      ],
+    },
+
     age: { type: Number },
 
     // Social Logins
@@ -34,13 +47,13 @@ const userSchema = new mongoose.Schema(
     dateOfBirth: { type: Date },
     gender: {
       type: String,
-      enum: ["male", "female", "other", "adult"],
+      enum: ["male", "female", "other"],
       default: "other",
     },
     phone: { type: String },
     location: {
-      country: { type: String },
-      city: { type: String },
+      country: { type: String, required: true, trim: true },
+      city: { type: String, trim: true },
     },
 
     // Preferences & Settings
@@ -70,8 +83,9 @@ userSchema.index(
   { unique: true, sparse: true }
 );
 
-// Hash password before saving
+// Hash password before saving (only for local accounts)
 userSchema.pre("save", async function (next) {
+  if (this.provider !== "local") return next(); // skip hashing for social accounts
   if (!this.isModified("password")) return next();
 
   const salt = await bcrypt.genSalt(10);
@@ -79,15 +93,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Age-based gender logic (safe check for undefined)
-userSchema.pre("save", function (next) {
-  if (this.age && this.age >= 18 && this.age <= 25) {
-    this.gender = "adult";
-  }
-  next();
-});
-
-// Compare password
+// Compare password (only works for local accounts)
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

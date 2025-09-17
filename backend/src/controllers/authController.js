@@ -1,44 +1,40 @@
 import User from "../models/userSchema.js";
-import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import bcrypt from "bcryptjs";
+import { generateToken } from "../utils/jwt.js";
 
-// Generate JWT
-const generateToken = (id, role, subscription) =>
-  jwt.sign({ id, role, subscription }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+// Password strength regex: at least 6 chars, 1 letter, 1 number, 1 special char
+const passwordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
-/**
- * SIGNUP
- */
+// ======================= SIGNUP =======================
 export const signup = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, age, gender } = req.body;
+    const { firstName, lastName, email, password, age, gender, country, city } =
+      req.body;
 
-    // check if user already exists
-    let user = await User.findOne({ email });
-    if (user) {
+    if (!country)
+      return res.status(400).json({ message: "Country is required" });
+
+    if (!passwordRegex.test(password))
+      return res.status(400).json({
+        message:
+          "Password must be at least 6 characters, include 1 letter, 1 number, and 1 special character",
+      });
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser)
       return res.status(400).json({ message: "User already exists" });
-    }
 
-    // Allow "adult" only if in valid range
-    let finalGender = gender;
-    if (age >= 18 && age <= 25) {
-      finalGender = "adult";
-    }
-
-    // create user
-    user = await User.create({
+    const user = await User.create({
       firstName,
       lastName,
       email,
       password,
       age,
-      gender: finalGender,
+      gender,
+      location: { country, city },
     });
 
-    // strip sensitive fields
     const {
       password: _,
       resetPasswordToken,
@@ -53,30 +49,23 @@ export const signup = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Signup error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-/**
- * LOGIN
- */
+// ======================= LOGIN =======================
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // check if user exists
-    const user = await User.findOne({ email });
-    if (!user) {
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user)
       return res.status(400).json({ message: "Invalid email or password" });
-    }
 
-    // check password
     const isMatch = await user.matchPassword(password);
-    if (!isMatch) {
+    if (!isMatch)
       return res.status(400).json({ message: "Invalid email or password" });
-    }
 
-    // strip sensitive fields
     const {
       password: _,
       resetPasswordToken,
@@ -91,29 +80,32 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Login error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-/**
- * SOCIAL LOGIN
- */
+// ======================= SOCIAL LOGIN =======================
 export const socialLogin = async (req, res) => {
   try {
-    const { provider, providerId, firstName, lastName, email, profilePic } =
-      req.body;
+    const {
+      provider,
+      providerId,
+      firstName,
+      lastName,
+      email,
+      profilePic,
+      country,
+      city,
+    } = req.body;
 
-    if (!provider || !providerId) {
+    if (!provider || !providerId)
       return res
         .status(400)
         .json({ message: "Provider and providerId are required" });
-    }
 
-    // check if user exists
     let user = await User.findOne({ provider, providerId });
 
     if (!user) {
-      // create new social user
       user = await User.create({
         firstName,
         lastName,
@@ -121,11 +113,11 @@ export const socialLogin = async (req, res) => {
         profilePic,
         provider,
         providerId,
-        password: crypto.randomBytes(16).toString("hex"), // random password
+        password: crypto.randomBytes(16).toString("hex"),
+        location: { country: country || "Unknown", city: city || "Unknown" },
       });
     }
 
-    // strip sensitive fields
     const {
       password: _,
       resetPasswordToken,
@@ -140,47 +132,39 @@ export const socialLogin = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Social login error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-/**
- * FORGOT PASSWORD
- */
+// ======================= FORGOT PASSWORD =======================
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     const resetToken = crypto.randomBytes(32).toString("hex");
-
     user.resetPasswordToken = crypto
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
-
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 min
+
     await user.save();
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    res.status(200).json({
-      message: "Reset link generated",
-      resetURL: resetUrl,
-    });
+    res
+      .status(200)
+      .json({ message: "Reset link generated", resetURL: resetUrl });
   } catch (error) {
     console.error("❌ Forgot password error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-/**
- * RESET PASSWORD
- */
+// ======================= RESET PASSWORD =======================
 export const resetPassword = async (req, res) => {
   try {
     const resetPasswordToken = crypto
@@ -193,9 +177,14 @@ export const resetPassword = async (req, res) => {
       resetPasswordExpire: { $gt: Date.now() },
     });
 
-    if (!user) {
+    if (!user)
       return res.status(400).json({ message: "Invalid or expired token" });
-    }
+
+    if (!passwordRegex.test(req.body.password))
+      return res.status(400).json({
+        message:
+          "Password must be at least 6 characters, include 1 letter, 1 number, and 1 special character",
+      });
 
     user.password = req.body.password;
     user.resetPasswordToken = undefined;
@@ -208,6 +197,6 @@ export const resetPassword = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Reset password error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
