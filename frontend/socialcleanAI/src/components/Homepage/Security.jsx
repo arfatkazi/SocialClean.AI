@@ -24,14 +24,14 @@ const Security = () => {
 
   return (
     <section className="relative py-16 px-4 sm:px-6 md:px-10 overflow-hidden transition-colors duration-300 bg-gray-50 dark:bg-gray-900">
-      {/* Gradient edges */}
+      {/* Subtle Gradient edges */}
       <div
         ref={leftFadeRef}
-        className="absolute top-0 left-0 h-full w-32 bg-gradient-to-r from-gray-50 dark:from-gray-900 pointer-events-none z-10"
+        className="absolute top-0 left-0 h-full w-20 sm:w-32 bg-gradient-to-r from-gray-50/20 dark:from-gray-900/20 pointer-events-none z-10"
       />
       <div
         ref={rightFadeRef}
-        className="absolute top-0 right-0 h-full w-32 bg-gradient-to-l from-gray-50 dark:from-gray-900 pointer-events-none z-10"
+        className="absolute top-0 right-0 h-full w-20 sm:w-32 bg-gradient-to-l from-gray-50/20 dark:from-gray-900/20 pointer-events-none z-10"
       />
 
       <div className="max-w-4xl mx-auto text-center relative z-20">
