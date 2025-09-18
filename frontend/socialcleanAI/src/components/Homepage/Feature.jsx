@@ -78,7 +78,7 @@ const Feature = () => {
   }, []);
 
   return (
-    <section className="relative py-16 sm:py-20 px-4 sm:px-6 md:px-10 transition-colors duration-300 overflow-hidden">
+    <section className="relative py-16 sm:py-20 px-4 sm:px-6 md:px-10 transition-colors duration-300 overflow-hidden mt-10">
       {/* Gradient edges */}
       <div className="absolute top-0 left-0 h-full w-32 bg-gradient-to-r from-white dark:from-gray-900 pointer-events-none z-10" />
       <div className="absolute top-0 right-0 h-full w-32 bg-gradient-to-l from-white dark:from-gray-900 pointer-events-none z-10" />
