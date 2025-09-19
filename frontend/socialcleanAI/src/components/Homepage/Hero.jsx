@@ -13,18 +13,16 @@ const Hero = () => {
 
   return (
     <section className="relative flex flex-col items-center justify-start md:justify-center px-6 md:px-16 py-20 md:py-32 min-h-[80vh] md:min-h-[90vh] overflow-hidden">
-      {/* 🔹 Video Background with zoom animation */}
-      <motion.video
+      {/* 🔹 Video Background (no animation) */}
+      <video
         className="absolute top-0 left-0 w-full h-full object-cover"
         autoPlay
         loop
         muted
         playsInline
-        animate={{ scale: [1, 1.05, 1] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       >
         <source src="/my_earth.mp4" type="video/mp4" />
-      </motion.video>
+      </video>
 
       {/* 🔹 Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/50 to-black/60"></div>

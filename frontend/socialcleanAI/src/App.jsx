@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Homepage/Footer";
+import Loading from "./components/Loading";
 
 // Pages
 import HomePage from "./pages/HomePage";
@@ -38,6 +40,22 @@ function Reports() {
 }
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFadeOut(true); // start fade animation
+      setTimeout(() => setLoading(false), 500); // remove after fade
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loading fadeOut={fadeOut} />;
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
       {/* Navbar */}
@@ -46,7 +64,6 @@ export default function App() {
       {/* Main content */}
       <main className="flex-grow">
         <Routes>
-          {/* Core pages */}
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About />} />
           <Route path="/scan" element={<Scan />} />
