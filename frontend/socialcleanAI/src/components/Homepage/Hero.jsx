@@ -23,10 +23,7 @@ const Hero = () => {
         animate={{ scale: [1, 1.05, 1] }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       >
-        <source
-          src="https://www.pexels.com/download/video/3125448/"
-          type="video/mp4"
-        />
+        <source src="/my_earth.mp4" type="video/mp4" />
       </motion.video>
 
       {/* 🔹 Gradient Overlay */}
