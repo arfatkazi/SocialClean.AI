@@ -30,7 +30,7 @@ const Hero = () => {
       </motion.video>
 
       {/* 🔹 Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/50 to-black/60"></div>
 
       {/* 🔹 Hero Content */}
       <div className="relative z-20 text-center max-w-4xl mt-10 md:mt-0">
