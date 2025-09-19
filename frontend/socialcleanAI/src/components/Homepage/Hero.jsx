@@ -13,25 +13,27 @@ const Hero = () => {
 
   return (
     <section className="relative flex flex-col items-center justify-start md:justify-center px-6 md:px-16 py-20 md:py-32 min-h-[80vh] md:min-h-[90vh] overflow-hidden">
-      {/* 🔹 Video Background */}
+      {/* 🔹 Video Background with zoom animation */}
       <motion.video
         className="absolute top-0 left-0 w-full h-full object-cover"
         autoPlay
         loop
         muted
         playsInline
-        animate={{ y: [0, -8, 0], scale: [1, 1.02, 1] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       >
-        <source src="/AI_earth.webm" type="video/webm" />
+        <source
+          src="https://www.pexels.com/download/video/3125448/"
+          type="video/mp4"
+        />
       </motion.video>
 
-      {/* 🔹 Overlay */}
-      <div className="absolute inset-0 bg-black/40"></div>
+      {/* 🔹 Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60"></div>
 
       {/* 🔹 Hero Content */}
       <div className="relative z-20 text-center max-w-4xl mt-10 md:mt-0">
-        {/* Animated Heading */}
         <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-6 text-white leading-snug sm:leading-tight md:leading-[1.1]">
           {headingWords.map((word, index) => (
             <motion.span
@@ -54,7 +56,6 @@ const Hero = () => {
           ))}
         </h1>
 
-        {/* Subtext */}
         <motion.p
           className="text-base sm:text-lg md:text-xl text-gray-200 mb-8 md:mb-10 max-w-2xl mx-auto px-2"
           initial={{ opacity: 0, y: 30 }}
@@ -65,7 +66,6 @@ const Hero = () => {
           posts effortlessly. Stay professional. Stay safe.
         </motion.p>
 
-        {/* Buttons */}
         <motion.div
           className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-xs mx-auto"
           initial={{ opacity: 0, y: 30 }}

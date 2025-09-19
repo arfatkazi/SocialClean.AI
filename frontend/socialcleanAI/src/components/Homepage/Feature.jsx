@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { Shield, Sparkles, Zap, BarChart } from "lucide-react";
+import { Shield, Sparkles, Zap, BarChart, Eye } from "lucide-react"; // Added Eye icon
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Autoplay, Navigation } from "swiper/modules";
@@ -37,6 +37,13 @@ const Feature = () => {
       title: "Detailed Reports",
       desc: "Get clear insights on risky posts with actionable suggestions.",
     },
+    {
+      icon: (
+        <Eye className="w-14 h-14 sm:w-16 sm:h-16 text-indigo-600 dark:text-indigo-400 mb-4" />
+      ),
+      title: "Social Presence Insight",
+      desc: "Monitor your social footprint and maintain a professional image across platforms.",
+    },
   ];
 
   // Heading animation
@@ -73,7 +80,9 @@ const Feature = () => {
         swiper.navigation.destroy();
         swiper.navigation.init();
         swiper.navigation.update();
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, []);
 
