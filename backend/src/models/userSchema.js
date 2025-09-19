@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true, // ✅ unique for all users
+      unique: true,
       lowercase: true,
       trim: true,
       match: [/.+\@.+\..+/, "Please fill a valid email address"],
@@ -44,11 +44,35 @@ const userSchema = new mongoose.Schema(
     },
     resetPasswordToken: { type: String },
     resetPasswordExpire: { type: Date },
+
+    // ✅ OAuth tokens for external providers
+    oauth: {
+      googlePhotos: {
+        accessToken: { type: String },
+        refreshToken: { type: String },
+        expiry: { type: Date },
+      },
+      facebook: {
+        accessToken: { type: String },
+        refreshToken: { type: String },
+        expiry: { type: Date },
+      },
+      instagram: {
+        accessToken: { type: String },
+        refreshToken: { type: String },
+        expiry: { type: Date },
+      },
+      twitter: {
+        accessToken: { type: String },
+        refreshToken: { type: String },
+        expiry: { type: Date },
+      },
+    },
   },
   { timestamps: true }
 );
 
-// Hash password before saving
+// ✅ Hash password before saving
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
@@ -56,7 +80,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Compare password
+// ✅ Compare password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

@@ -8,6 +8,9 @@ import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js";
+import googleAuthRoutes from "./routes/googleAuth.js";
+import session from "express-session";
+import passport from "./config/passport.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +23,31 @@ app.use(morgan("dev"));
 
 //Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/content", contentRoutes);
+app.use("/api/auth", googleAuthRoutes);
+
+// Sessions
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "supersecret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Auth routes
+app.get("/auth/google", passport.authenticate("google"));
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/login",
+  })
+);
 
 const aj = arcjet({
   key: process.env.ARCJET_KEY,
