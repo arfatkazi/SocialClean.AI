@@ -75,11 +75,11 @@ const Works = () => {
   }, []);
 
   return (
-    <section className="pt-10 sm:pt-16 md:pt-20 px-4 sm:px-6 md:px-10 transition-colors duration-300">
-      <div className="max-w-6xl mx-auto text-center">
+    <section className="relative py-16 sm:py-20 px-4 sm:px-6 md:px-10 transition-colors duration-300 overflow-hidden mt-10">
+      <div className="max-w-7xl mx-auto text-center relative z-20">
         {/* Animated Heading */}
         <motion.h2
-          className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-8 sm:mb-10 text-gray-900 dark:text-gray-100 flex justify-center gap-3"
+          className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-10 sm:mb-12 text-gray-900 dark:text-gray-100 flex justify-center gap-3 flex-wrap"
           variants={containerVariant}
           initial="hidden"
           whileInView="visible"
