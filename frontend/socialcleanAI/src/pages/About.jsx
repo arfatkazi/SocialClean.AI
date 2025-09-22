@@ -158,9 +158,9 @@ const About = () => {
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: "Alice Johnson", role: "Founder & CEO" },
-              { name: "Mark Lee", role: "Lead AI Engineer" },
-              { name: "Sophie Kim", role: "Product Designer" },
+              { name: "Arfat Kazi", role: "Founder & CEO" },
+              { name: "MR. Sayeed Khushroo", role: "Lead AI Engineer" },
+              { name: "Arfat kazi", role: "Product Designer" },
             ].map((member, idx) => (
               <motion.div
                 key={member.name}
