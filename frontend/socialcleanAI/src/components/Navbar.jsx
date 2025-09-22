@@ -97,14 +97,40 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu Button */}
-        <button
-          className="md:hidden flex flex-col space-y-1 focus:outline-none"
+        <motion.button
+          className="md:hidden flex flex-col justify-center items-center w-8 h-8 relative focus:outline-none"
           onClick={() => setIsOpen(!isOpen)}
+          initial={false}
+          animate={isOpen ? "open" : "closed"}
         >
-          <span className="w-4 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full"></span>
-          <span className="w-4 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full"></span>
-          <span className="w-4 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full"></span>
-        </button>
+          {/* Top Line */}
+          <motion.span
+            variants={{
+              closed: { rotate: 0, y: -6 },
+              open: { rotate: 45, y: 0 },
+            }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
+          />
+          {/* Middle Line */}
+          <motion.span
+            variants={{
+              closed: { opacity: 1, scaleX: 1 },
+              open: { opacity: 0, scaleX: 0 },
+            }}
+            transition={{ duration: 0.2 }}
+            className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
+          />
+          {/* Bottom Line */}
+          <motion.span
+            variants={{
+              closed: { rotate: 0, y: 6 },
+              open: { rotate: -45, y: 0 },
+            }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
+          />
+        </motion.button>
       </div>
 
       {/* Mobile Menu */}
