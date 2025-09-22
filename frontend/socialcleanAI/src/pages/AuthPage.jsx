@@ -80,14 +80,14 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r dark:bg-gray-750 text-gray-900 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-        <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 px-4 py-8">
+      <div className="w-full max-w-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8 border border-white/30 dark:border-gray-600/30 transition-all mt-30">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
           {isLogin
             ? "Login to SocialCleanAI"
             : "Create Your SocialCleanAI Account"}
         </h2>
-        <p className="text-center text-gray-500 mt-2 mb-6 text-sm">
+        <p className="text-center text-gray-500 dark:text-gray-300 mt-2 mb-6 text-sm sm:text-base">
           {isLogin
             ? "Login to continue your journey 🚀"
             : "Signup to get started with us ✨"}
@@ -96,7 +96,7 @@ export default function AuthPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
             <>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="text"
                   name="firstName"
@@ -104,7 +104,7 @@ export default function AuthPage() {
                   value={form.firstName}
                   onChange={handleChange}
                   required
-                  className="w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full sm:w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <input
                   type="text"
@@ -113,7 +113,7 @@ export default function AuthPage() {
                   value={form.lastName}
                   onChange={handleChange}
                   required
-                  className="w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full sm:w-1/2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
 
@@ -132,7 +132,7 @@ export default function AuthPage() {
                 value={form.gender}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-black bg-white dark:bg-gray-900 dark:text-white"
               >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
@@ -201,13 +201,12 @@ export default function AuthPage() {
             </div>
           )}
 
+          {/* Glass Button */}
           <button
             type="submit"
-            className="relative w-full bg-gradient-to-r from-blue-600 to-indigo-500 text-white py-2 rounded-lg font-semibold shadow-md overflow-hidden group hover:shadow-xl transition-all duration-500"
+            className="relative w-full py-2 rounded-xl font-semibold text-white bg-indigo-600/60 dark:bg-indigo-500/50 backdrop-blur-sm border border-white/20 dark:border-gray-400/30 shadow-lg hover:bg-white/20 dark:hover:bg-white/10 hover:backdrop-blur-lg transition-all duration-300 overflow-hidden"
           >
-            <span className="relative z-10">
-              {isLogin ? "Login" : "Signup"}
-            </span>
+            {isLogin ? "Login" : "Signup"}
           </button>
         </form>
 
@@ -221,14 +220,17 @@ export default function AuthPage() {
         </button>
 
         <div className="flex items-center my-6">
-          <hr className="flex-grow border-gray-300" />
-          <span className="mx-2 text-gray-400 text-sm">OR</span>
-          <hr className="flex-grow border-gray-300" />
+          <hr className="flex-grow border-gray-300 dark:border-gray-600" />
+          <span className="mx-2 text-gray-400 dark:text-gray-500 text-sm">
+            OR
+          </span>
+          <hr className="flex-grow border-gray-300 dark:border-gray-600" />
         </div>
 
+        {/* Google Button */}
         <button
           onClick={handleGoogleAuth}
-          className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-xl py-2 hover:bg-gray-50 transition-shadow shadow-sm hover:shadow-md font-medium"
+          className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-xl py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-shadow shadow-sm hover:shadow-md font-medium backdrop-blur-sm"
         >
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
