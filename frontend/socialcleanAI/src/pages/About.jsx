@@ -4,17 +4,17 @@ import { motion } from "framer-motion";
 const sectionVariant = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.3 },
+    transition: { staggerChildren: 0.2, ease: "easeOut" },
   },
 };
 
 const itemVariant = (direction = 0) => ({
-  hidden: { opacity: 0, x: direction * 50, y: 50 },
+  hidden: { opacity: 0, x: direction * 40, y: 30 },
   show: {
     opacity: 1,
     x: 0,
     y: 0,
-    transition: { type: "spring", stiffness: 50, damping: 25, duration: 1.2 },
+    transition: { duration: 0.7, ease: "easeOut" },
   },
 });
 
@@ -24,14 +24,9 @@ const About = () => {
       <div className="max-w-5xl mx-auto text-center">
         {/* Heading */}
         <motion.h2
-          initial={{ opacity: 0, y: -60 }}
+          initial={{ opacity: 0, y: -40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{
-            type: "spring",
-            stiffness: 50,
-            damping: 25,
-            duration: 1.2,
-          }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true, amount: 0.3 }}
           className="text-3xl md:text-4xl font-extrabold mb-6 mt-30"
         >
@@ -40,15 +35,9 @@ const About = () => {
 
         {/* Story */}
         <motion.p
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{
-            type: "spring",
-            stiffness: 50,
-            damping: 25,
-            duration: 1.2,
-            delay: 0.3,
-          }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
           viewport={{ once: true, amount: 0.2 }}
           className="text-base md:text-lg leading-relaxed mb-12"
         >
@@ -81,9 +70,10 @@ const About = () => {
               key={item.title}
               variants={itemVariant(idx % 2 === 0 ? -1 : 1)}
               whileHover={{
-                scale: 1.05,
-                y: -2,
-                boxShadow: "0px 12px 25px rgba(0,0,0,0.15)",
+                scale: 1.03,
+                y: -3,
+                boxShadow: "0px 8px 20px rgba(0,0,0,0.15)",
+                transition: { duration: 0.3, ease: "easeOut" },
               }}
               className="p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 cursor-pointer"
             >
@@ -127,9 +117,10 @@ const About = () => {
                 key={item.step}
                 variants={itemVariant(idx % 2 === 0 ? -1 : 1)}
                 whileHover={{
-                  scale: 1.05,
-                  y: -2,
-                  boxShadow: "0px 12px 25px rgba(0,0,0,0.15)",
+                  scale: 1.03,
+                  y: -3,
+                  boxShadow: "0px 8px 20px rgba(0,0,0,0.15)",
+                  transition: { duration: 0.3, ease: "easeOut" },
                 }}
                 className="p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 text-center cursor-pointer"
               >
@@ -159,16 +150,17 @@ const About = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { name: "Arfat Kazi", role: "Founder & CEO" },
-              { name: "MR. Sayeed Khushroo", role: "Lead AI Engineer" },
+              { name: "MR. Sayeed Khushroo", role: "Founder & CEO" },
               { name: "Arfat kazi", role: "Product Designer" },
             ].map((member, idx) => (
               <motion.div
                 key={member.name}
                 variants={itemVariant(idx % 2 === 0 ? -1 : 1)}
                 whileHover={{
-                  scale: 1.05,
-                  y: -2,
-                  boxShadow: "0px 12px 25px rgba(0,0,0,0.15)",
+                  scale: 1.03,
+                  y: -3,
+                  boxShadow: "0px 8px 20px rgba(0,0,0,0.15)",
+                  transition: { duration: 0.3, ease: "easeOut" },
                 }}
                 className="p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 text-center cursor-pointer"
               >
