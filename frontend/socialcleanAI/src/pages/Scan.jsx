@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Twitter, Facebook, Instagram, Image, Loader } from "lucide-react";
+import { Twitter, Facebook, Instagram, Image } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Scan = () => {
   const [isScanning, setIsScanning] = useState(false);
@@ -15,7 +16,6 @@ const Scan = () => {
     setProgress(0);
     setResults([]);
 
-    // Fake scanning progress
     let interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -39,103 +39,136 @@ const Scan = () => {
           setIsScanning(false);
           return 100;
         }
-        return prev + 20;
+        return prev + 10;
       });
-    }, 500);
+    }, 400);
   };
 
+  const platforms = [
+    { name: "Twitter", color: "bg-blue-500 hover:bg-blue-600", icon: Twitter },
+    {
+      name: "Facebook",
+      color: "bg-blue-700 hover:bg-blue-800",
+      icon: Facebook,
+    },
+    {
+      name: "Instagram",
+      color: "bg-pink-500 hover:bg-pink-600",
+      icon: Instagram,
+    },
+    {
+      name: "Google Photos",
+      color: "bg-red-500 hover:bg-red-600",
+      icon: Image,
+    },
+  ];
+
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Scan Your Accounts</h2>
+    <div className="px-4 sm:px-6 md:px-8 py-6 max-w-5xl mx-auto">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center mt-30">
+        Scan Your Accounts
+      </h2>
 
       {/* Connect Accounts */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <button
-          onClick={() => connectAccount("Twitter")}
-          className="flex items-center justify-center gap-2 bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition"
-        >
-          <Twitter size={20} /> Twitter
-        </button>
-        <button
-          onClick={() => connectAccount("Facebook")}
-          className="flex items-center justify-center gap-2 bg-blue-700 text-white py-3 px-4 rounded-lg hover:bg-blue-800 transition"
-        >
-          <Facebook size={20} /> Facebook
-        </button>
-        <button
-          onClick={() => connectAccount("Instagram")}
-          className="flex items-center justify-center gap-2 bg-pink-500 text-white py-3 px-4 rounded-lg hover:bg-pink-600 transition"
-        >
-          <Instagram size={20} /> Instagram
-        </button>
-        <button
-          onClick={() => connectAccount("Google Photos")}
-          className="flex items-center justify-center gap-2 bg-red-500 text-white py-3 px-4 rounded-lg hover:bg-red-600 transition"
-        >
-          <Image size={20} /> Google Photos
-        </button>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {platforms.map((platform) => {
+          const Icon = platform.icon;
+          return (
+            <button
+              key={platform.name}
+              onClick={() => connectAccount(platform.name)}
+              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-white transition ${platform.color} w-full`}
+            >
+              <Icon size={20} /> {platform.name}
+            </button>
+          );
+        })}
       </div>
 
       {/* Scan Button */}
       <div className="text-center mb-8">
-        <button
+        <motion.button
           onClick={startScan}
           disabled={isScanning}
-          className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 disabled:opacity-50"
+          whileHover={{ scale: !isScanning ? 1.05 : 1 }}
+          whileTap={{ scale: !isScanning ? 0.95 : 1 }}
+          className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 disabled:opacity-50 transition-all duration-200 w-full sm:w-auto"
         >
           {isScanning ? "Scanning..." : "Scan Now"}
-        </button>
+        </motion.button>
       </div>
 
       {/* Progress Bar */}
       {isScanning && (
         <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-4 mb-6 overflow-hidden">
-          <div
-            className="bg-indigo-600 h-4 transition-all duration-300"
-            style={{ width: `${progress}%` }}
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ ease: "easeInOut", duration: 0.4 }}
+            className="bg-indigo-600 h-4 rounded-full"
           />
         </div>
       )}
 
       {/* Results */}
-      {results.length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold mb-4">Scan Results</h3>
-          <table className="w-full text-left border border-gray-300 dark:border-gray-700 rounded-lg">
-            <thead className="bg-gray-200 dark:bg-gray-700">
-              <tr>
-                <th className="px-4 py-2">ID</th>
-                <th className="px-4 py-2">Type</th>
-                <th className="px-4 py-2">Content</th>
-                <th className="px-4 py-2">Category</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((item) => (
-                <tr
-                  key={item.id}
-                  className="border-t border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  <td className="px-4 py-2">{item.id}</td>
-                  <td className="px-4 py-2">{item.type}</td>
-                  <td className="px-4 py-2">{item.content}</td>
-                  <td
-                    className={`px-4 py-2 font-medium ${
-                      item.category === "Offensive"
-                        ? "text-red-500"
-                        : item.category === "Private Info"
-                        ? "text-yellow-500"
-                        : "text-green-500"
-                    }`}
-                  >
-                    {item.category}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <AnimatePresence>
+        {results.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h3 className="text-xl sm:text-2xl font-bold mb-4">Scan Results</h3>
+            <div className="overflow-x-auto rounded-lg shadow">
+              <table className="w-full text-left border border-gray-300 dark:border-gray-700">
+                <thead className="bg-gray-200 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-3 sm:px-4 py-2 text-sm sm:text-base">
+                      ID
+                    </th>
+                    <th className="px-3 sm:px-4 py-2 text-sm sm:text-base">
+                      Type
+                    </th>
+                    <th className="px-3 sm:px-4 py-2 text-sm sm:text-base">
+                      Content
+                    </th>
+                    <th className="px-3 sm:px-4 py-2 text-sm sm:text-base">
+                      Category
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((item) => (
+                    <motion.tr
+                      key={item.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: item.id * 0.2 }}
+                      className="border-t border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      <td className="px-3 sm:px-4 py-2">{item.id}</td>
+                      <td className="px-3 sm:px-4 py-2">{item.type}</td>
+                      <td className="px-3 sm:px-4 py-2">{item.content}</td>
+                      <td
+                        className={`px-3 sm:px-4 py-2 font-medium ${
+                          item.category === "Offensive"
+                            ? "text-red-500"
+                            : item.category === "Private Info"
+                            ? "text-yellow-500"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {item.category}
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

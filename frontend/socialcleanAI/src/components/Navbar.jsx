@@ -24,9 +24,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-3 z-50">
-      {" "}
-      {/* reduced top margin for mobile */}
+    <nav className="fixed top-0 left-0 right-0 z-[1000] mt-5">
       <div
         className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between
                     bg-white/30 dark:bg-gray-800/40 backdrop-blur-lg border border-white/30 dark:border-gray-400/40
@@ -55,10 +53,9 @@ export default function Navbar() {
               variants={itemVariants}
               initial="hidden"
               animate="show"
-              whileHover={{ scale: 1.05, color: "#6366f1" }}
             >
               <Link
-                className="text-gray-900 dark:text-white font-medium transition-all duration-200"
+                className="text-gray-900 dark:text-white font-medium transition-all duration-300 hover:text-indigo-700 dark:hover:text-indigo-400"
                 to={link.to}
               >
                 {link.label}
@@ -109,6 +106,7 @@ export default function Navbar() {
           <span className="w-4 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full"></span>
         </button>
       </div>
+
       {/* Mobile Menu */}
       <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} navLinks={navLinks} />
     </nav>

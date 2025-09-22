@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   const headingWords = [
     "Clean",
     "Your",
@@ -13,7 +16,7 @@ const Hero = () => {
 
   return (
     <section className="relative flex flex-col items-center justify-start md:justify-center px-6 md:px-16 py-20 md:py-32 min-h-[80vh] md:min-h-[90vh] overflow-hidden">
-      {/* 🔹 Video Background (no animation) */}
+      {/* Video Background */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover"
         autoPlay
@@ -24,10 +27,10 @@ const Hero = () => {
         <source src="/my_earth.webm" type="video/webm" />
       </video>
 
-      {/* 🔹 Gradient Overlay */}
+      {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/50 to-black/60"></div>
 
-      {/* 🔹 Hero Content */}
+      {/* Hero Content */}
       <div className="relative z-20 text-center max-w-4xl mt-10 md:mt-0">
         <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-6 text-white leading-snug sm:leading-tight md:leading-[1.1]">
           {headingWords.map((word, index) => (
@@ -70,7 +73,9 @@ const Hero = () => {
             duration: 0.8,
           }}
         >
+          {/* Get Started Button */}
           <motion.button
+            onClick={() => navigate("/signup")}
             whileHover={{
               scale: 1.08,
               background: "linear-gradient(90deg, #4f46e5, #6366f1)",
@@ -82,7 +87,9 @@ const Hero = () => {
             Get Started
           </motion.button>
 
+          {/* Learn More Button */}
           <motion.button
+            onClick={() => navigate("/about")} // navigate to About page
             whileHover={{
               scale: 1.08,
               backgroundColor: "#ffffff",
