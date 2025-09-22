@@ -1,5 +1,5 @@
-import { Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import Lenis from "@studio-freight/lenis";
 
 // Components
@@ -20,18 +20,32 @@ import AuthPage from "./pages/AuthPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
+// Scroll to top on route change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
+  const mainRef = useRef(null);
 
-  // 🚀 Lenis smooth scroll setup
+  // Initialize Lenis smooth scroll on main container only
   useEffect(() => {
+    if (!mainRef.current) return;
+
     const lenis = new Lenis({
-      duration: 1.2, // scroll speed (higher = slower)
-      smooth: true, // enable smooth scroll
-      smoothTouch: false, // keep natural touch on mobile
-      smoothWheel: true, // keep scrollbar visible
+      duration: 1.2,
+      smooth: true,
+      smoothTouch: false,
+      smoothWheel: true,
       gestureDirection: "vertical",
+      wrapper: mainRef.current, // scroll only inside main
+      content: mainRef.current.firstChild,
     });
 
     function raf(time) {
@@ -40,12 +54,10 @@ export default function App() {
     }
     requestAnimationFrame(raf);
 
-    return () => {
-      lenis.destroy();
-    };
+    return () => lenis.destroy();
   }, []);
 
-  // ⏳ Loading fade-out animation
+  // Loading fade-out
   useEffect(() => {
     const timer = setTimeout(() => {
       setFadeOut(true);
@@ -55,38 +67,33 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (loading) {
-    return <Loading fadeOut={fadeOut} />;
-  }
+  if (loading) return <Loading fadeOut={fadeOut} />;
 
   return (
-    <div
-      id="lenis-root"
-      className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300"
-    >
-      {/* Navbar */}
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
+      <ScrollToTop />
       <Navbar />
 
-      {/* Main content */}
-      <main className="flex-grow">
-        <Routes>
-          {/* Public pages */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/scan" element={<Scan />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/contact" element={<Contact />} />
+      {/* Scrollable main content */}
+      <main ref={mainRef} className="flex-grow overflow-y-auto relative">
+        <div className="min-h-screen">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/scan" element={<Scan />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/contact" element={<Contact />} />
 
-          {/* Auth pages */}
-          <Route path="/login" element={<AuthPage />} />
-          <Route path="/signup" element={<AuthPage />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-        </Routes>
+            {/* Auth */}
+            <Route path="/login" element={<AuthPage />} />
+            <Route path="/signup" element={<AuthPage />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+          </Routes>
+        </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
