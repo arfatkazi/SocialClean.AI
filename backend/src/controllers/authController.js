@@ -1,3 +1,4 @@
+// backend/src/controllers/authController.js
 import User from "../models/userSchema.js";
 import crypto from "crypto";
 import { generateToken } from "../utils/jwt.js";
@@ -12,6 +13,7 @@ export const signup = async (req, res) => {
 
     if (!country)
       return res.status(400).json({ message: "Country is required" });
+
     if (!passwordRegex.test(password))
       return res.status(400).json({
         message:
@@ -39,9 +41,16 @@ export const signup = async (req, res) => {
       ...userData
     } = user.toObject();
 
+    // ✅ FIXED: Pass an object to generateToken
+    const token = generateToken({
+      id: user._id,
+      role: user.role,
+      subscription: user.subscription?.type || "free",
+    });
+
     res.status(201).json({
       message: "Signup successful",
-      token: generateToken(user._id, user.role, user.subscription?.type),
+      token,
       user: userData,
     });
   } catch (error) {
@@ -69,9 +78,16 @@ export const login = async (req, res) => {
       ...userData
     } = user.toObject();
 
+    // ✅ FIXED: Correct JWT payload
+    const token = generateToken({
+      id: user._id,
+      role: user.role,
+      subscription: user.subscription?.type || "free",
+    });
+
     res.status(200).json({
       message: "Login successful",
-      token: generateToken(user._id, user.role, user.subscription?.type),
+      token,
       user: userData,
     });
   } catch (error) {
@@ -132,9 +148,16 @@ export const resetPassword = async (req, res) => {
 
     await user.save();
 
+    // ✅ FIXED: Consistent token payload
+    const token = generateToken({
+      id: user._id,
+      role: user.role,
+      subscription: user.subscription?.type || "free",
+    });
+
     res.status(200).json({
       message: "Password reset successful",
-      token: generateToken(user._id, user.role, user.subscription?.type),
+      token,
     });
   } catch (error) {
     console.error("❌ Reset password error:", error);

@@ -24,7 +24,7 @@ const Hero = () => {
         muted
         playsInline
       >
-        <source src="/my_earth.webm" type="video/webm" />
+        <source src="/my_earth.mp4" type="video/mp4" />
       </video>
 
       {/* Gradient Overlay */}

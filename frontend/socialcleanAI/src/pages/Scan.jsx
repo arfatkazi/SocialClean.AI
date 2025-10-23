@@ -1,48 +1,14 @@
+// frontend/src/pages/Scan.jsx
 import React, { useState } from "react";
 import { Twitter, Facebook, Instagram, Image } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import AIAnalysisModal from "../components/AIAnalysisModal";
 
-const Scan = () => {
+export default function Scan() {
   const [isScanning, setIsScanning] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [results, setResults] = useState([]);
-
-  const connectAccount = (platform) => {
-    alert(`${platform} connected (mock).`);
-  };
-
-  const startScan = () => {
-    setIsScanning(true);
-    setProgress(0);
-    setResults([]);
-
-    let interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          // Mock results
-          setResults([
-            {
-              id: 1,
-              type: "Text",
-              content: "This is dumb",
-              category: "Offensive",
-            },
-            { id: 2, type: "Image", content: "party.jpg", category: "Safe" },
-            {
-              id: 3,
-              type: "Text",
-              content: "Call me at 9876543210",
-              category: "Private Info",
-            },
-          ]);
-          setIsScanning(false);
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 400);
-  };
+  const [scanData, setScanData] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   const platforms = [
     { name: "Twitter", color: "bg-blue-500 hover:bg-blue-600", icon: Twitter },
@@ -63,23 +29,130 @@ const Scan = () => {
     },
   ];
 
+  // Mock connection (later replace with OAuth)
+  const connectAccount = (platform) => {
+    alert(`${platform} connected (mock).`);
+  };
+
+  // Start scan logic
+  const startScan = async () => {
+    const posts = [
+      {
+        platform: "Twitter",
+        postId: "t1",
+        type: "Text",
+        content: "This is dumb",
+      },
+      {
+        platform: "Google Photos",
+        postId: "g1",
+        type: "Image",
+        content: "passport.jpg",
+      },
+      {
+        platform: "Twitter",
+        postId: "t2",
+        type: "Text",
+        content: "Call me at 9876543210",
+      },
+    ];
+
+    setIsScanning(true);
+    setProgress(10);
+    setScanData(null);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Please login first!");
+        setIsScanning(false);
+        return;
+      }
+
+      const res = await fetch("http://localhost:5000/api/scan/start", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ posts }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.message || "Failed to start scan");
+        setIsScanning(false);
+        return;
+      }
+
+      setProgress(25);
+
+      // Polling for scan completion
+      const poll = setInterval(async () => {
+        const freshToken = localStorage.getItem("token");
+        if (!freshToken) {
+          clearInterval(poll);
+          setIsScanning(false);
+          alert("Session expired, please log in again.");
+          return;
+        }
+
+        try {
+          const r = await fetch(
+            `http://localhost:5000/api/scan/${data.scanId}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${freshToken}`,
+              },
+            }
+          );
+
+          if (!r.ok) return;
+          const sd = await r.json();
+
+          if (sd.status === "processing") {
+            setProgress((p) => Math.min(90, p + 10));
+          }
+
+          if (sd.status === "done" || sd.status === "failed") {
+            clearInterval(poll);
+            setIsScanning(false);
+            setProgress(100);
+            setScanData(sd);
+            setOpenModal(true);
+          }
+        } catch (err) {
+          console.error("Polling error:", err);
+          clearInterval(poll);
+          setIsScanning(false);
+        }
+      }, 1500);
+    } catch (err) {
+      console.error("Scan start error:", err);
+      alert("Server error while starting scan");
+      setIsScanning(false);
+    }
+  };
+
   return (
-    <div className="px-4 sm:px-6 md:px-8 py-6 max-w-5xl mx-auto">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center mt-30">
+    <div className="px-4 py-6 max-w-5xl mx-auto">
+      {/* Page Heading */}
+      <h2 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-white">
         Scan Your Accounts
       </h2>
 
-      {/* Connect Accounts */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {platforms.map((platform) => {
-          const Icon = platform.icon;
+      {/* Account Connection Buttons */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {platforms.map((p) => {
+          const Icon = p.icon;
           return (
             <button
-              key={platform.name}
-              onClick={() => connectAccount(platform.name)}
-              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-white transition ${platform.color} w-full`}
+              key={p.name}
+              onClick={() => connectAccount(p.name)}
+              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-white font-medium ${p.color}`}
             >
-              <Icon size={20} /> {platform.name}
+              <Icon size={20} /> {p.name}
             </button>
           );
         })}
@@ -92,7 +165,7 @@ const Scan = () => {
           disabled={isScanning}
           whileHover={{ scale: !isScanning ? 1.05 : 1 }}
           whileTap={{ scale: !isScanning ? 0.95 : 1 }}
-          className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 disabled:opacity-50 transition-all duration-200 w-full sm:w-auto"
+          className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 disabled:opacity-50 transition-all duration-200"
         >
           {isScanning ? "Scanning..." : "Scan Now"}
         </motion.button>
@@ -104,73 +177,43 @@ const Scan = () => {
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
-            transition={{ ease: "easeInOut", duration: 0.4 }}
+            transition={{ ease: "easeInOut", duration: 0.5 }}
             className="bg-indigo-600 h-4 rounded-full"
           />
         </div>
       )}
 
-      {/* Results */}
-      <AnimatePresence>
-        {results.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h3 className="text-xl sm:text-2xl font-bold mb-4">Scan Results</h3>
-            <div className="overflow-x-auto rounded-lg shadow">
-              <table className="w-full text-left border border-gray-300 dark:border-gray-700">
-                <thead className="bg-gray-200 dark:bg-gray-700">
-                  <tr>
-                    <th className="px-3 sm:px-4 py-2 text-sm sm:text-base">
-                      ID
-                    </th>
-                    <th className="px-3 sm:px-4 py-2 text-sm sm:text-base">
-                      Type
-                    </th>
-                    <th className="px-3 sm:px-4 py-2 text-sm sm:text-base">
-                      Content
-                    </th>
-                    <th className="px-3 sm:px-4 py-2 text-sm sm:text-base">
-                      Category
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {results.map((item) => (
-                    <motion.tr
-                      key={item.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: item.id * 0.2 }}
-                      className="border-t border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      <td className="px-3 sm:px-4 py-2">{item.id}</td>
-                      <td className="px-3 sm:px-4 py-2">{item.type}</td>
-                      <td className="px-3 sm:px-4 py-2">{item.content}</td>
-                      <td
-                        className={`px-3 sm:px-4 py-2 font-medium ${
-                          item.category === "Offensive"
-                            ? "text-red-500"
-                            : item.category === "Private Info"
-                            ? "text-yellow-500"
-                            : "text-green-500"
-                        }`}
-                      >
-                        {item.category}
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
+      {/* Latest Scan Summary */}
+      {scanData && (
+        <div className="mt-6 p-4 rounded-lg bg-white dark:bg-gray-800 shadow-md border border-gray-200 dark:border-gray-700">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-semibold text-gray-900 dark:text-white">
+                Latest Scan
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Reputation:{" "}
+                <span className="font-semibold text-indigo-600 dark:text-indigo-400">
+                  {scanData.summary?.reputationScore ?? "N/A"}
+                </span>
+              </p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <button
+              onClick={() => setOpenModal(true)}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 transition"
+            >
+              View Details
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Detailed Results */}
+      <AIAnalysisModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        scan={scanData}
+      />
     </div>
   );
-};
-
-export default Scan;
+}
