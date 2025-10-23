@@ -22,7 +22,6 @@ import ResetPassword from "./pages/ResetPassword";
 
 /* ==========================================================
    ✅ SCROLL TO TOP ON ROUTE CHANGE
-   - Automatically scrolls user to top on every route change
 ========================================================== */
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -34,8 +33,6 @@ function ScrollToTop() {
 
 /* ==========================================================
    ✅ PROTECTED ROUTE COMPONENT
-   - Restricts access to authenticated users only
-   - Redirects to /login if no valid token found
 ========================================================== */
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -55,11 +52,9 @@ export default function App() {
 
   /* ==========================================================
      🌀 Initialize Smooth Scroll using Lenis
-     - Applies smooth scroll only inside the main container
   =========================================================== */
   useEffect(() => {
     if (!mainRef.current) return;
-
     const lenis = new Lenis({
       duration: 1.2,
       smooth: true,
@@ -75,13 +70,11 @@ export default function App() {
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
-
     return () => lenis.destroy();
   }, []);
 
   /* ==========================================================
-     ⏳ Loading Screen Fade-out Effect
-     - Displays the loading animation for 2 seconds
+     ⏳ Loading Screen Fade-out
   =========================================================== */
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -91,19 +84,34 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  /* ==========================================================
+     🌗 Theme: Sync Global Tailwind Dark/Light Mode
+     - Default = dark
+     - Restores from localStorage
+     - Works globally for all pages
+  =========================================================== */
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
   if (loading) return <Loading fadeOut={fadeOut} />;
 
   /* ==========================================================
      🧭 APP STRUCTURE
-     - Navbar + Main Content + Footer
-     - Routes are inside <main> container
   =========================================================== */
+
+  // bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
+    <div className="flex flex-col min-h-screen  transition-colors duration-300">
       <ScrollToTop />
       <Navbar />
 
-      {/* Scrollable main content */}
+      {/* Main Scrollable Content */}
       <main ref={mainRef} className="flex-grow overflow-y-auto relative">
         <div className="min-h-screen">
           <Routes>
@@ -137,7 +145,7 @@ export default function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-            {/* 🚧 404 fallback (optional) */}
+            {/* 🚧 404 fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

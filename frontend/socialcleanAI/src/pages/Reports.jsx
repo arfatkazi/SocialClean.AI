@@ -1,13 +1,11 @@
-// pages/Reports.js
 export default function Reports() {
   return (
-    <section className="py-16 px-6 text-center">
+    <section className="py-16 px-6 text-center bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-500">
       <h1 className="text-3xl md:text-4xl font-bold mb-4 mt-20">
         📊 Reports & Analytics
       </h1>
       <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
-        Here you’ll see detailed reports of your scanned content — stats,
-        charts, and weekly summaries. 🚀 (Coming soon in Phase 2)
+        View your scan results, AI analytics, and summaries. (Coming soon)
       </p>
       <div className="mt-8">
         <div className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg max-w-md mx-auto">

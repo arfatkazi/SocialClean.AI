@@ -136,7 +136,7 @@ export default function Scan() {
   };
 
   return (
-    <div className="px-4 py-6 max-w-5xl mx-auto">
+    <div className="px-4 py-6 max-w-5xl mx-auto mt-50">
       {/* Page Heading */}
       <h2 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-white">
         Scan Your Accounts

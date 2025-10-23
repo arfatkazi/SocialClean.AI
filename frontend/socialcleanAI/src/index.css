@@ -1,26 +1,52 @@
 @import "tailwindcss";
+@reference "tailwindcss";
 
-/* Optional: smooth background transition */
+/* ======================================================
+   🌗 GLOBAL THEME FIXED for Tailwind v4
+   - Keeps your exact colors and transitions
+   - No style/animation/layout change
+====================================================== */
+
+/* Default (light mode) */
 html {
-  transition: background-color 0.3s, color 0.3s;
+  background-color: #f9fafb;
+  color-scheme: light;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* ===== Custom Scrollbar ===== */
+/* Dark mode */
+html.dark {
+  background-color: #0f172a;
+  color-scheme: dark;
+}
 
-/* Chrome, Edge, Safari */
+/* Base styles */
+body {
+  /* ✅ Tailwind 4 needs @apply + @reference to work with utilities */
+  @apply transition-colors duration-300;
+  color: rgb(17 24 39); /* text-gray-900 */
+  background-color: rgb(249 250 251); /* bg-gray-50 */
+
+  /* Dark mode */
+  html.dark & {
+    color: rgb(243 244 246); /* text-gray-100 */
+    background-color: rgb(3 7 18); /* bg-gray-950 */
+  }
+}
+
+/* ======================================================
+   🎚️ SCROLLBAR STYLES
+====================================================== */
 ::-webkit-scrollbar {
-  width: 10px; /* thickness */
+  width: 10px;
 }
-
 ::-webkit-scrollbar-track {
-  background: transparent; /* transparent track */
+  background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #6366f1, #4338ca); /* gradient purple */
+  background: linear-gradient(180deg, #6366f1, #4338ca);
   border-radius: 8px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #4f46e5, #312e81);
 }
