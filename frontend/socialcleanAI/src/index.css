@@ -24,13 +24,13 @@ html.dark {
 body {
   /* ✅ Tailwind 4 needs @apply + @reference to work with utilities */
   @apply transition-colors duration-300;
-  color: rgb(17 24 39); /* text-gray-900 */
-  background-color: rgb(249 250 251); /* bg-gray-50 */
+  color: rgb(255, 255, 255); /* text-gray-900 */
+  background-color: #101727; /* bg-gray-50 */
 
   /* Dark mode */
   html.dark & {
     color: rgb(243 244 246); /* text-gray-100 */
-    background-color: rgb(3 7 18); /* bg-gray-950 */
+    background-color: #030915; /* bg-gray-950 */
   }
 }
 

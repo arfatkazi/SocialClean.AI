@@ -1,6 +1,6 @@
 export default function Reports() {
   return (
-    <section className="py-16 px-6 text-center bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-500">
+    <section className="py-16 px-6 text-center   transition-colors duration-500 mt-50">
       <h1 className="text-3xl md:text-4xl font-bold mb-4 mt-20">
         📊 Reports & Analytics
       </h1>

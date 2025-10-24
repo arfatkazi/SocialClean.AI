@@ -9,8 +9,6 @@ export default function HomePage() {
     // dark:bg-gray-950
     <div
       className="flex flex-col min-h-screen 
-      bg-gray-50 
-      text-gray-900 dark:text-gray-100 
       transition-colors duration-500 ease-in-out"
     >
       {/* Hero Section (Video / Banner) */}

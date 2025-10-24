@@ -20,7 +20,7 @@ const itemVariant = (direction = 0) => ({
 
 const About = () => {
   return (
-    <section className="py-16 px-6 md:px-20 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <section className="py-16 px-6 md:px-20">
       <div className="max-w-5xl mx-auto text-center">
         {/* Heading */}
         <motion.h2
