@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Sun, Moon, LogOut, User } from "lucide-react";
+import { Sun, Moon, LogOut, User, X } from "lucide-react";
 
 export default function MobileMenu({
   isOpen,
@@ -27,7 +27,7 @@ export default function MobileMenu({
       opacity: 1,
       x: 0,
       transition: {
-        delay: i * 0.08,
+        delay: i * 0.04,
         type: "spring",
         stiffness: 140,
         damping: 25,
@@ -45,6 +45,15 @@ export default function MobileMenu({
           animate="visible"
           exit="exit"
         >
+          {/* 🔘 Close Button */}
+          <motion.button
+            onClick={() => setIsOpen(false)}
+            whileHover={{ scale: 1.1, rotate: 180 }}
+            className="absolute top-20 right-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+          >
+            <X className="w-5 h-5 text-gray-900 dark:text-gray-100" />
+          </motion.button>
+
           {/* Links */}
           {navLinks.map((link, i) => (
             <motion.div
