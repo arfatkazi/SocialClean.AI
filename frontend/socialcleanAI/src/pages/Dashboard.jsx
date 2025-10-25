@@ -164,7 +164,7 @@ const Dashboard = () => {
                 </div>
               </>
             ) : (
-              <p className="text-gray-500 mt-6">
+              <p className="text-gray-400 mt-6 ml-25 text-2xl">
                 No scans found yet. Click <strong>Scan</strong> to start your
                 first analysis.
               </p>

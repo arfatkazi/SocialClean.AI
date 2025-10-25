@@ -149,6 +149,10 @@ const Feature = () => {
                     <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300">
                       {item.desc}
                     </p>
+
+                    {/* Gradient overlays */}
+                    <div className="pointer-events-none absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-white/80 dark:from-gray-900/20"></div>
+                    <div className="pointer-events-none absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-white/80 dark:from-gray-900/20"></div>
                   </div>
                 </div>
               </div>

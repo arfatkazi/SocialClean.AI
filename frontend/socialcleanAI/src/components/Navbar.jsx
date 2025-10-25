@@ -27,7 +27,7 @@ export default function Navbar() {
     setIsAuthenticated(!!token);
   }, [location.pathname]);
 
-  // ✅ Dark mode setup
+  // ✅ Dark mode setup (global sync)
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "light") {
@@ -56,6 +56,7 @@ export default function Navbar() {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/login");
+    setMenuOpen(false);
   };
 
   const itemVariants = {
@@ -112,7 +113,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right Section */}
+        {/* Right Section (Desktop) */}
         <div className="hidden md:flex items-center space-x-4">
           {/* Toggle */}
           <motion.button
@@ -172,46 +173,65 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <motion.button
-          className="md:hidden flex flex-col justify-center items-center w-8 h-8 relative focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
-          initial={false}
-          animate={isOpen ? "open" : "closed"}
-        >
-          <motion.span
-            variants={{
-              closed: { rotate: 0, y: -6 },
-              open: { rotate: 45, y: 0 },
-            }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
-          />
-          <motion.span
-            variants={{
-              closed: { opacity: 1, scaleX: 1 },
-              open: { opacity: 0, scaleX: 0 },
-            }}
-            transition={{ duration: 0.2 }}
-            className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
-          />
-          <motion.span
-            variants={{
-              closed: { rotate: 0, y: 6 },
-              open: { rotate: -45, y: 0 },
-            }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
-          />
-        </motion.button>
+        {/* Mobile Right Side Section */}
+        <div className="md:hidden flex items-center gap-3">
+          {/* Dark mode toggle beside hamburger */}
+          <motion.button
+            onClick={toggleDarkMode}
+            whileHover={{ rotate: 10, scale: 1.1 }}
+            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+          >
+            {darkMode ? (
+              <Sun className="text-yellow-400" size={20} />
+            ) : (
+              <Moon className="text-gray-900" size={20} />
+            )}
+          </motion.button>
+
+          {/* Mobile Menu Button */}
+          <motion.button
+            className="flex flex-col justify-center items-center w-8 h-8 relative focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+            initial={false}
+            animate={isOpen ? "open" : "closed"}
+          >
+            <motion.span
+              variants={{
+                closed: { rotate: 0, y: -6 },
+                open: { rotate: 45, y: 0 },
+              }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
+            />
+            <motion.span
+              variants={{
+                closed: { opacity: 1, scaleX: 1 },
+                open: { opacity: 0, scaleX: 0 },
+              }}
+              transition={{ duration: 0.2 }}
+              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
+            />
+            <motion.span
+              variants={{
+                closed: { rotate: 0, y: 6 },
+                open: { rotate: -45, y: 0 },
+              }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
+            />
+          </motion.button>
+        </div>
       </div>
 
+      {/* Mobile Menu */}
       <MobileMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         navLinks={navLinks}
         isAuthenticated={isAuthenticated}
         handleLogout={handleLogout}
+        toggleDarkMode={toggleDarkMode}
+        darkMode={darkMode}
       />
     </nav>
   );

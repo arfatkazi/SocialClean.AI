@@ -70,7 +70,9 @@ const Works = () => {
         swiper.navigation.destroy();
         swiper.navigation.init();
         swiper.navigation.update();
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, []);
 
@@ -148,15 +150,14 @@ const Works = () => {
                         More info about {item.title}!
                       </p>
                     </div>
+                    {/* Gradient overlays */}
+                    <div className="pointer-events-none absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-white/80 dark:from-gray-900/20"></div>
+                    <div className="pointer-events-none absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-white/80 dark:from-gray-900/20"></div>
                   </div>
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
-
-          {/* Gradient overlays */}
-          <div className="pointer-events-none absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-white/80 dark:from-gray-900/80"></div>
-          <div className="pointer-events-none absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-white/80 dark:from-gray-900/80"></div>
         </div>
 
         {/* Custom SVG Arrows */}
