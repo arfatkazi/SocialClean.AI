@@ -207,6 +207,8 @@ const Works = () => {
           </button>
         </div>
       </div>
+      {/* Indigo Divider (Sticky under Hero) */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-600/60 via-purple-500/60 to-transparent"></div>
     </section>
   );
 };

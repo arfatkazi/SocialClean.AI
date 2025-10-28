@@ -3,6 +3,7 @@ import Works from "../components/Homepage/Works.jsx";
 import Feature from "../components/Homepage/Feature.jsx";
 import Security from "../components/Homepage/Security.jsx";
 import Cta from "../components/Homepage/Cta.jsx";
+import FAQSection from "../components/FAQSection.jsx";
 
 export default function HomePage() {
   return (
@@ -25,6 +26,10 @@ export default function HomePage() {
 
       {/* Call to Action */}
       <Cta />
+
+      {/* FAQ Section */}
+
+      <FAQSection />
     </div>
   );
 }

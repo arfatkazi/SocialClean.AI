@@ -23,7 +23,7 @@ const Security = () => {
   const rightFadeRef = useRef(null);
 
   return (
-    <section className="relative py-16 px-4 sm:px-6 md:px-10 overflow-hidden transition-colors duration-300 bg-gray-50 dark:bg-gray-900">
+    <section className="relative py-16 px-4 sm:px-6 md:px-10 overflow-hidden transition-colors duration-300">
       {/* Subtle Gradient edges */}
       <div
         ref={leftFadeRef}
@@ -84,6 +84,8 @@ const Security = () => {
           </motion.p>
         </motion.div>
       </div>
+      {/* Indigo Divider (Sticky under Hero) */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-600/60 via-purple-500/60 to-transparent"></div>
     </section>
   );
 };
