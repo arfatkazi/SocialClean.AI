@@ -2,12 +2,11 @@
 @reference "tailwindcss";
 
 /* ======================================================
-   🌗 GLOBAL THEME FIXED for Tailwind v4
-   - Keeps your exact colors and transitions
-   - No style/animation/layout change
+   🌗 GLOBAL THEME (Tailwind v4 Safe)
+   - Keeps your color transitions + smooth theme toggle
 ====================================================== */
 
-/* Default (light mode) */
+/* Light mode defaults */
 html {
   background-color: #f9fafb;
   color-scheme: light;
@@ -20,22 +19,20 @@ html.dark {
   color-scheme: dark;
 }
 
-/* Base styles */
+/* Base body styles */
 body {
-  /* ✅ Tailwind 4 needs @apply + @reference to work with utilities */
   @apply transition-colors duration-300;
-  color: rgb(255, 255, 255); /* text-gray-900 */
-  background-color: #030915; /* bg-gray-950 */
+  color: rgb(255 255 255);
+  background-color: #030915;
 
-  /* Dark mode */
   html.dark & {
-    color: rgb(243 244 246); /* text-gray-100 */
-    background-color: #141923; /* bg-gray-50 */
+    color: rgb(243 244 246);
+    background-color: #141923;
   }
 }
 
 /* ======================================================
-   🎚️ SCROLLBAR STYLES
+   🎚️ SCROLLBAR STYLING (Custom Indigo Gradient)
 ====================================================== */
 ::-webkit-scrollbar {
   width: 10px;
@@ -51,8 +48,36 @@ body {
   background: linear-gradient(180deg, #4f46e5, #312e81);
 }
 
-/* Firefox */
+/* Firefox support */
 * {
   scrollbar-width: thin;
   scrollbar-color: #6366f1 transparent;
+}
+
+/* ======================================================
+   ✨ CUSTOM ANIMATIONS
+====================================================== */
+
+/* 1️⃣ Subtle Glow for Active FAQ (border shadow) */
+@keyframes pulseGlowBorder {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+  }
+}
+
+/* 2️⃣ Ambient Glow for Footer Background */
+@keyframes pulseGlowAmbient {
+  0%,
+  100% {
+    opacity: 0.6;
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 0.9;
+    filter: blur(25px);
+  }
 }
