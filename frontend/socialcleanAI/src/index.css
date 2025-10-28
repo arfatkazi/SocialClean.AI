@@ -27,7 +27,7 @@ body {
 
   html.dark & {
     color: rgb(243 244 246);
-    background-color: #141923;
+    background-color: rgb(20, 26, 40);
   }
 }
 
