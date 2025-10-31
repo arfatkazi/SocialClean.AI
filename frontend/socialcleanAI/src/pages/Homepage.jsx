@@ -1,9 +1,10 @@
-import Hero from "../components/Homepage/Hero.jsx";
+// import Hero from "../components/Homepage/Hero.jsx";
 import Works from "../components/Homepage/Works.jsx";
 import Feature from "../components/Homepage/Feature.jsx";
 import Security from "../components/Homepage/Security.jsx";
 import Cta from "../components/Homepage/Cta.jsx";
 import FAQSection from "../components/FAQSection.jsx";
+import HeroCopy from "../components/Homepage/HeroCopy.jsx";
 
 export default function HomePage() {
   return (
@@ -13,7 +14,8 @@ export default function HomePage() {
       transition-colors duration-500 ease-in-out"
     >
       {/* Hero Section (Video / Banner) */}
-      <Hero />
+      {/* <Hero /> */}
+      <HeroCopy />
 
       {/* How It Works */}
       <Works />
