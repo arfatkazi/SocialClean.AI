@@ -6,14 +6,7 @@ const HeroCopy = () => {
   const ref = React.useRef(null);
   const navigate = useNavigate();
 
-  const headingWords = [
-    "Clean",
-    "Your",
-    "Digital",
-    "Footprint",
-    "with",
-    "SocialClean.AI",
-  ];
+  const headingWords = ["Clean", "Your", "Digital", "Footprint"];
 
   // Framer Motion scroll animations
   const { scrollYProgress } = useScroll({
@@ -71,7 +64,7 @@ const HeroCopy = () => {
       <motion.img
         src="/HERO_IMG.png"
         alt="Hero Background Back"
-        className="absolute top-0 md:top-10 left-0 w-full h-full object-cover z-0"
+        className=" mt-10 absolute top-0 md:top-10 left-0 w-full h-full object-cover z-0"
         initial={{ opacity: 0, filter: "blur(12px)" }}
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 1.2, ease: "easeOut" }}
@@ -80,7 +73,7 @@ const HeroCopy = () => {
       <motion.img
         src="/HERO_IMG.png"
         alt="Hero Background Mid"
-        className="absolute top-0 md:top-10 left-0 w-full h-full object-cover z-10"
+        className=" mt-10 absolute top-0 md:top-10 left-0 w-full h-full object-cover z-10"
         style={{ y: yMidSpring, scale: scaleSpring, willChange: "transform" }}
       />
       <motion.img
@@ -90,15 +83,12 @@ const HeroCopy = () => {
         style={{ y: yFrontSpring, scale: scaleSpring, willChange: "transform" }}
       />
 
-      {/* Gradient Overlay */}
-      {/* <div className="absolute inset-0 z-20 bg-gradient-to-b from-black/50 via-black/50 to-black/60"></div> */}
-
       {/* Hero Content */}
       <div
         className="relative z-30 text-center max-w-4xl  md:mt-0"
         style={{ opacity: textOpacitySpring }}
       >
-        <h1 className="text-3xl sm:text-5xl mt-20 md:text-7xl font-extrabold mb-6 text-white leading-snug sm:leading-tight md:leading-[1.1]">
+        <h1 className="text-3xl sm:text-5xl -mt-65 md:text-7xl font-extrabold mb-6 text-white leading-snug sm:leading-tight md:leading-[1.1]">
           {headingWords.map((word, index) => (
             <motion.span
               key={index}
@@ -125,10 +115,7 @@ const HeroCopy = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: headingWords.length * 0.25 + 0.2, duration: 1 }}
-        >
-          SocialClean.AI helps you scan, filter, and clean your social media
-          posts effortlessly. Stay professional. Stay safe.
-        </motion.p>
+        ></motion.p>
 
         <motion.div
           className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-xs mx-auto"

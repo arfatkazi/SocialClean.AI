@@ -86,7 +86,7 @@ export default function Navbar() {
             to="/"
             className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white drop-shadow-lg"
           >
-            SocialClean.AI
+            SocialClean.Ai
           </Link>
         </motion.div>
 

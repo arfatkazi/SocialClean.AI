@@ -24,7 +24,7 @@ const Footer = () => {
           className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-6"
         >
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">
-            SocialClean.AI
+            SocialClean.Ai
           </span>
         </motion.h3>
 
