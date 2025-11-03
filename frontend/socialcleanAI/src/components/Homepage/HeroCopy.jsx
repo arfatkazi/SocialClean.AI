@@ -46,7 +46,7 @@ const HeroCopy = () => {
   return (
     <section
       ref={ref}
-      className="relative flex flex-col items-center justify-center px-4 sm:px-10 py-28 sm:py-36 min-h-[100vh] overflow-hidden"
+      className="relative flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 py-24 sm:py-28 md:py-36 min-h-[100vh] overflow-hidden mb-28 sm:mb-36"
       style={{ perspective: "1000px" }}
     >
       {/* BACKGROUND IMAGES */}
@@ -54,7 +54,7 @@ const HeroCopy = () => {
         <motion.img
           key={i}
           src="/HERO_IMG.png"
-          className={`absolute inset-0 w-full h-full object-cover mt-30 ${
+          className={`absolute inset-0 w-full h-full object-cover object-center ${
             i === 2 ? "opacity-30 mix-blend-screen" : ""
           }`}
           style={{
@@ -68,11 +68,11 @@ const HeroCopy = () => {
 
       {/* CONTENT */}
       <div
-        className="relative z-20 text-center max-w-3xl"
+        className="relative z-20 text-center max-w-[90%] sm:max-w-2xl md:max-w-3xl"
         style={{ opacity: textOpacitySpring }}
       >
         {/* HEADING */}
-        <h1 className="text-4xl sm:text-6xl -mt-60 md:text-7xl font-extrabold leading-tight text-white mb-6">
+        <h1 className="text-3xl lg:-mt-80 lg:mb-7  sm:text-5xl md:text-7xl font-extrabold leading-tight text-white mb-16 sm:mb-20 md:mb-24 mt-[-60px] sm:mt-[-100px] md:mt-[-150px]">
           {headingWords.map((word, index) => (
             <motion.span
               key={index}
@@ -92,7 +92,7 @@ const HeroCopy = () => {
 
         {/* BUTTONS */}
         <motion.div
-          className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-5"
+          className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-5 w-full"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -108,7 +108,7 @@ const HeroCopy = () => {
               boxShadow: "0px 12px 24px rgba(99,102,241,0.4)",
             }}
             whileTap={{ scale: 0.94 }}
-            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-indigo-600/60 backdrop-blur-xl border border-white/20 text-white font-semibold shadow-md"
+            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-indigo-600/60 backdrop-blur-xl border border-white/20 text-white font-semibold shadow-md w-full sm:w-auto"
           >
             Get Started
           </motion.button>
@@ -121,7 +121,7 @@ const HeroCopy = () => {
               color: "#4f46e5",
             }}
             whileTap={{ scale: 0.94 }}
-            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-indigo-400/50 backdrop-blur-xl bg-white/10 text-white font-semibold"
+            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-indigo-400/50 backdrop-blur-xl bg-white/10 text-white font-semibold w-full sm:w-auto"
           >
             Learn More
           </motion.button>

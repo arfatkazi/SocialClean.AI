@@ -8,7 +8,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(true); // default dark
+  const [darkMode, setDarkMode] = useState(true);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,13 +21,11 @@ export default function Navbar() {
     { to: "/contact", label: "Contact" },
   ];
 
-  // ✅ Auth state
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
   }, [location.pathname]);
 
-  // ✅ Dark mode setup (global sync)
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "light") {
@@ -51,7 +49,6 @@ export default function Navbar() {
     }
   };
 
-  // ✅ Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
@@ -69,29 +66,25 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[1000] mt-5">
-      <div
-        className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between
-                    bg-white/30 dark:bg-gray-800/40 backdrop-blur-lg border border-white/30 dark:border-gray-400/40
-                    rounded-xl sm:rounded-2xl transition-colors duration-500 shadow-md"
-      >
+    <nav className="fixed top-0 left-0 right-0 z-[1000] px-2 sm:px-4 md:px-6 mt-3 sm:mt-5">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between bg-white/40 dark:bg-black/40 backdrop-blur-lg border border-white/30 dark:border-gray-700 rounded-2xl transition-all duration-500 shadow-md">
         {/* Logo */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          whileHover={{ scale: 1.1, color: "#6366f1" }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          whileHover={{ scale: 1.1 }}
         >
           <Link
             to="/"
-            className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white drop-shadow-lg"
+            className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white whitespace-nowrap"
           >
             SocialClean.Ai
           </Link>
         </motion.div>
 
-        {/* Links */}
-        <div className="hidden md:flex flex-1 justify-center space-x-8">
+        {/* Desktop Nav */}
+        <div className="hidden md:flex flex-1 justify-center gap-6 lg:gap-10">
           {navLinks.map((link) => (
             <motion.div
               key={link.to}
@@ -101,11 +94,12 @@ export default function Navbar() {
             >
               <Link
                 to={link.to}
-                className={`text-gray-900 dark:text-white font-medium transition-all duration-300 hover:text-indigo-700 dark:hover:text-indigo-400 ${
+                className={`text-sm lg:text-base font-medium transition-all duration-300 hover:text-indigo-600 dark:hover:text-indigo-400 ${
                   location.pathname === link.to
                     ? "text-indigo-600 dark:text-indigo-400 font-semibold"
-                    : ""
-                }`}
+                    : "text-gray-900 dark:text-white"
+                }
+                `}
               >
                 {link.label}
               </Link>
@@ -113,32 +107,30 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right Section (Desktop) */}
-        <div className="hidden md:flex items-center space-x-4">
-          {/* Toggle */}
+        {/* Desktop Right Section */}
+        <div className="hidden md:flex items-center gap-3 lg:gap-4">
           <motion.button
             onClick={toggleDarkMode}
-            whileHover={{ rotate: 15, scale: 1.1 }}
-            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            whileHover={{ scale: 1.1 }}
+            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700"
           >
             {darkMode ? (
-              <Sun className="text-yellow-400" size={18} />
+              <Sun size={18} className="text-yellow-400" />
             ) : (
-              <Moon className="text-gray-900" size={18} />
+              <Moon size={18} className="text-gray-900" />
             )}
           </motion.button>
 
-          {/* Auth buttons */}
           {!isAuthenticated ? (
             <>
               <Link
-                className="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-indigo-700 transition"
+                className="px-3 lg:px-4 py-2 rounded-lg bg-blue-600 text-white text-sm lg:text-base hover:bg-indigo-700"
                 to="/signup"
               >
                 Sign up
               </Link>
               <Link
-                className="px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-emerald-700 transition"
+                className="px-3 lg:px-4 py-2 rounded-lg bg-green-600 text-white text-sm lg:text-base hover:bg-emerald-700"
                 to="/login"
               >
                 Log in
@@ -148,12 +140,12 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm lg:text-base"
               >
                 <User size={18} /> My Account
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
                   <Link
                     to="/dashboard"
                     className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -173,57 +165,51 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Right Side Section */}
+        {/* Mobile Controls */}
         <div className="md:hidden flex items-center gap-3">
-          {/* Dark mode toggle beside hamburger */}
           <motion.button
             onClick={toggleDarkMode}
-            whileHover={{ rotate: 10, scale: 1.1 }}
-            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            whileHover={{ scale: 1.1 }}
+            className="p-2 rounded-full bg-gray-300 dark:bg-gray-700"
           >
             {darkMode ? (
-              <Sun className="text-yellow-400" size={20} />
+              <Sun size={20} className="text-yellow-400" />
             ) : (
-              <Moon className="text-gray-900" size={20} />
+              <Moon size={20} className="text-gray-900" />
             )}
           </motion.button>
 
-          {/* Mobile Menu Button */}
           <motion.button
-            className="flex flex-col justify-center items-center w-8 h-8 relative focus:outline-none"
+            className="flex flex-col justify-center items-center w-8 h-8"
             onClick={() => setIsOpen(!isOpen)}
             initial={false}
             animate={isOpen ? "open" : "closed"}
           >
             <motion.span
+              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200"
               variants={{
                 closed: { rotate: 0, y: -6 },
                 open: { rotate: 45, y: 0 },
               }}
-              transition={{ type: "spring", stiffness: 260, damping: 20 }}
-              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
             />
             <motion.span
+              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200"
               variants={{
                 closed: { opacity: 1, scaleX: 1 },
                 open: { opacity: 0, scaleX: 0 },
               }}
-              transition={{ duration: 0.2 }}
-              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
             />
             <motion.span
+              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200"
               variants={{
                 closed: { rotate: 0, y: 6 },
                 open: { rotate: -45, y: 0 },
               }}
-              transition={{ type: "spring", stiffness: 260, damping: 20 }}
-              className="absolute w-6 h-0.5 bg-gray-800 dark:bg-gray-200 rounded-full origin-center"
             />
           </motion.button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <MobileMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}
