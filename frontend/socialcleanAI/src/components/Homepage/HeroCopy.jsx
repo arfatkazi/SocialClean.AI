@@ -8,100 +8,80 @@ const HeroCopy = () => {
 
   const headingWords = ["Clean", "Your", "Digital", "Footprint"];
 
-  // Framer Motion scroll animations
+  const isMobile = window.innerWidth < 768;
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]); // parallax scroll
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]); // slow zoom
-  const blur = useTransform(scrollYProgress, [0, 1], ["0px", "8px"]);
-  // Depth parallax layers + GPU-optimized springs
-  const yBack = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]); // far background
-  const yMid = y; // middle (main)
-  const yFront = useTransform(scrollYProgress, [0, 1], ["10%", "50%"]); // foreground
 
-  const yBackSpring = useSpring(yBack, {
-    stiffness: 100,
-    damping: 20,
-    mass: 0.3,
-  });
-  const yMidSpring = useSpring(yMid, {
-    stiffness: 100,
-    damping: 20,
-    mass: 0.3,
-  });
-  const yFrontSpring = useSpring(yFront, {
-    stiffness: 100,
-    damping: 20,
-    mass: 0.3,
-  });
-  const scaleSpring = useSpring(scale, {
-    stiffness: 90,
-    damping: 18,
-    mass: 0.35,
-  });
-
-  // Fade text as image zooms
-  const textOpacity = useTransform(
+  const y = useTransform(
     scrollYProgress,
-    [0, 0.4, 0.8, 1],
-    [1, 0.9, 0.5, 0]
+    [0, 1],
+    ["0%", isMobile ? "10%" : "30%"]
   );
-  const textOpacitySpring = useSpring(textOpacity, {
-    stiffness: 120,
-    damping: 20,
-    mass: 0.3,
-  });
+  const scale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [1, isMobile ? 1.02 : 1.08]
+  );
+  const blur = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0px", isMobile ? "4px" : "8px"]
+  );
+
+  const yBack = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
+  const yMid = y;
+  const yFront = useTransform(scrollYProgress, [0, 1], ["5%", "25%"]);
+
+  const yBackSpring = useSpring(yBack);
+  const yMidSpring = useSpring(yMid);
+  const yFrontSpring = useSpring(yFront);
+  const scaleSpring = useSpring(scale);
+
+  const textOpacity = useTransform(scrollYProgress, [0, 0.7, 1], [1, 0.6, 0]);
+  const textOpacitySpring = useSpring(textOpacity);
 
   return (
     <section
       ref={ref}
-      style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
-      className="relative flex flex-col items-center justify-start md:justify-center touch-pan-y px-6 md:px-16 py-20 md:py-32 min-h-[80vh] md:min-h-[90vh] overflow-hidden"
+      className="relative flex flex-col items-center justify-center px-4 sm:px-10 py-28 sm:py-36 min-h-[100vh] overflow-hidden"
+      style={{ perspective: "1000px" }}
     >
-      {/* Image Background */}
-      <motion.img
-        src="/HERO_IMG.png"
-        alt="Hero Background Back"
-        className=" mt-10 absolute top-0 md:top-10 left-0 w-full h-full object-cover z-0"
-        initial={{ opacity: 0, filter: "blur(12px)" }}
-        animate={{ opacity: 1, filter: "blur(0px)" }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        style={{ y: yBackSpring, scale: scaleSpring, willChange: "transform" }}
-      />
-      <motion.img
-        src="/HERO_IMG.png"
-        alt="Hero Background Mid"
-        className=" mt-10 absolute top-0 md:top-10 left-0 w-full h-full object-cover z-10"
-        style={{ y: yMidSpring, scale: scaleSpring, willChange: "transform" }}
-      />
-      <motion.img
-        src="/HERO_IMG.png"
-        alt="Hero Background Front"
-        className="absolute top-0 md:top-10 left-0 w-full h-full object-cover z-20 pointer-events-none opacity-25 mix-blend-screen"
-        style={{ y: yFrontSpring, scale: scaleSpring, willChange: "transform" }}
-      />
+      {/* BACKGROUND IMAGES */}
+      {[0, 1, 2].map((i) => (
+        <motion.img
+          key={i}
+          src="/HERO_IMG.png"
+          className={`absolute inset-0 w-full h-full object-cover mt-30 ${
+            i === 2 ? "opacity-30 mix-blend-screen" : ""
+          }`}
+          style={{
+            y: [yBackSpring, yMidSpring, yFrontSpring][i],
+            scale: scaleSpring,
+            filter: blur,
+            willChange: "transform",
+          }}
+        />
+      ))}
 
-      {/* Hero Content */}
+      {/* CONTENT */}
       <div
-        className="relative z-30 text-center max-w-4xl  md:mt-0"
+        className="relative z-20 text-center max-w-3xl"
         style={{ opacity: textOpacitySpring }}
       >
-        <h1 className="text-3xl sm:text-5xl -mt-65 md:text-7xl font-extrabold mb-6 text-white leading-snug sm:leading-tight md:leading-[1.1]">
+        {/* HEADING */}
+        <h1 className="text-4xl sm:text-6xl -mt-60 md:text-7xl font-extrabold leading-tight text-white mb-6">
           {headingWords.map((word, index) => (
             <motion.span
               key={index}
-              className={`inline-block mr-2 sm:mr-3 ${
-                word.includes("AI")
-                  ? "text-indigo-100 drop-shadow-[0_0_10px_rgba(99,102,241,0.9)]"
-                  : ""
-              }`}
+              className="inline-block mr-2"
               initial={{ opacity: 0, y: 60, scale: 0.8 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{
-                duration: 0.8,
-                delay: index * 0.25,
+                duration: 0.7,
+                delay: index * 0.15,
                 ease: "easeOut",
               }}
             >
@@ -110,47 +90,38 @@ const HeroCopy = () => {
           ))}
         </h1>
 
-        <motion.p
-          className="text-base sm:text-lg md:text-xl text-gray-200 mb-8 md:mb-10 max-w-2xl mx-auto px-2"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: headingWords.length * 0.25 + 0.2, duration: 1 }}
-        ></motion.p>
-
+        {/* BUTTONS */}
         <motion.div
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-xs mx-auto"
+          className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-5"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
-            delay: headingWords.length * 0.25 + 0.5,
+            delay: headingWords.length * 0.15 + 0.4,
             duration: 0.8,
           }}
         >
-          {/* Get Started Button */}
           <motion.button
             onClick={() => navigate("/signup")}
             whileHover={{
-              scale: 1.08,
-              background: "linear-gradient(90deg, #4f46e5, #6366f1)",
+              scale: 1.07,
+              background: "linear-gradient(90deg,#4f46e5,#6366f1)",
               boxShadow: "0px 12px 24px rgba(99,102,241,0.4)",
             }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-indigo-600/60 backdrop-blur-xl border border-white/20 text-white font-semibold shadow-lg transition-all duration-300"
+            whileTap={{ scale: 0.94 }}
+            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-indigo-600/60 backdrop-blur-xl border border-white/20 text-white font-semibold shadow-md"
           >
             Get Started
           </motion.button>
 
-          {/* Learn More Button */}
           <motion.button
-            onClick={() => navigate("/about")} // navigate to About page
+            onClick={() => navigate("/about")}
             whileHover={{
-              scale: 1.08,
-              backgroundColor: "#ffffff",
+              scale: 1.07,
+              background: "rgba(255,255,255,0.92)",
               color: "#4f46e5",
-              boxShadow: "0px 8px 20px rgba(0,0,0,0.3)",
             }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-indigo-400/50 backdrop-blur-xl bg-white/10 text-white font-semibold transition-all duration-300"
+            whileTap={{ scale: 0.94 }}
+            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-indigo-400/50 backdrop-blur-xl bg-white/10 text-white font-semibold"
           >
             Learn More
           </motion.button>
