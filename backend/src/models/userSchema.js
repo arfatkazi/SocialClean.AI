@@ -13,15 +13,20 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/.+\@.+\..+/, "Please fill a valid email address"],
     },
+
+    // ✅ Password not required if Google user
     password: {
       type: String,
-      required: true,
+      required: function () {
+        return !this.isGoogleUser;
+      },
       minlength: 6,
       match: [
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/,
         "Password must be at least 6 characters, include 1 letter, 1 number, 1 special char",
       ],
     },
+
     age: { type: Number },
     profilePic: {
       type: String,
@@ -33,10 +38,13 @@ const userSchema = new mongoose.Schema(
       enum: ["male", "female", "other"],
       default: "other",
     },
+
+    // ✅ Location not required for Google signup
     location: {
-      country: { type: String, required: true, trim: true },
+      country: { type: String, default: "Unknown", trim: true },
       city: { type: String, trim: true },
     },
+
     role: { type: String, enum: ["user", "admin"], default: "user" },
     subscription: {
       type: { type: String, enum: ["free", "premium"], default: "free" },
@@ -45,7 +53,11 @@ const userSchema = new mongoose.Schema(
     resetPasswordToken: { type: String },
     resetPasswordExpire: { type: Date },
 
-    // ✅ OAuth tokens for external providers
+    // ✅ Google login fields
+    isGoogleUser: { type: Boolean, default: false },
+    googleId: { type: String },
+
+    // ✅ OAuth tokens storage (optional)
     oauth: {
       googlePhotos: {
         accessToken: { type: String },
@@ -72,9 +84,9 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ Hash password before saving
+// ✅ Hash password only if normal user
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password") || this.isGoogleUser) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();

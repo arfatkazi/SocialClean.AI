@@ -1,13 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
-
 const sectionVariant = {
   hidden: {},
-  show: {
-    transition: { staggerChildren: 0.2, ease: "easeOut" },
-  },
+  show: { transition: { staggerChildren: 0.2, ease: "easeOut" } },
 };
-
 const itemVariant = (direction = 0) => ({
   hidden: { opacity: 0, x: direction * 40, y: 30 },
   show: {
@@ -17,12 +13,13 @@ const itemVariant = (direction = 0) => ({
     transition: { duration: 0.7, ease: "easeOut" },
   },
 });
-
 const About = () => {
   return (
     <section className="py-16 px-6 md:px-20">
+      {" "}
       <div className="max-w-5xl mx-auto text-center">
-        {/* Heading */}
+        {" "}
+        {/* Heading */}{" "}
         <motion.h2
           initial={{ opacity: 0, y: -40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -30,10 +27,12 @@ const About = () => {
           viewport={{ once: true, amount: 0.3 }}
           className="text-3xl md:text-4xl font-extrabold mb-6 mt-30"
         >
-          Who We Are <span className="text-indigo-600">at SocialCleanAI</span>
-        </motion.h2>
-
-        {/* Story */}
+          {" "}
+          Who We Are <span className="text-indigo-600">
+            at SocialCleanAI
+          </span>{" "}
+        </motion.h2>{" "}
+        {/* Story */}{" "}
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -41,14 +40,14 @@ const About = () => {
           viewport={{ once: true, amount: 0.2 }}
           className="text-base md:text-lg leading-relaxed mb-12"
         >
+          {" "}
           SocialCleanAI is a team of passionate developers, designers, and AI
           experts dedicated to helping individuals take control of their digital
           footprint. Our platform ensures every user can manage, review, and
           clean their online presence safely and efficiently. We believe in
-          empowering people to shape their digital identity with confidence.
-        </motion.p>
-
-        {/* Mission + Vision */}
+          empowering people to shape their digital identity with confidence.{" "}
+        </motion.p>{" "}
+        {/* Mission + Vision */}{" "}
         <motion.div
           className="grid md:grid-cols-2 gap-8 text-left mb-16"
           variants={sectionVariant}
@@ -56,6 +55,7 @@ const About = () => {
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
         >
+          {" "}
           {[
             {
               title: "Our Mission",
@@ -77,17 +77,19 @@ const About = () => {
               }}
               className="p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 cursor-pointer"
             >
+              {" "}
               <h3 className="text-xl font-bold text-indigo-600 mb-3">
-                {item.title}
-              </h3>
+                {" "}
+                {item.title}{" "}
+              </h3>{" "}
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                {item.text}
-              </p>
+                {" "}
+                {item.text}{" "}
+              </p>{" "}
             </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Our Process */}
+          ))}{" "}
+        </motion.div>{" "}
+        {/* Our Process */}{" "}
         <motion.div
           className="mb-16"
           variants={sectionVariant}
@@ -95,10 +97,13 @@ const About = () => {
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
         >
+          {" "}
           <h3 className="text-2xl font-bold text-indigo-600 mb-6 text-center">
-            Our Process
-          </h3>
+            {" "}
+            Our Process{" "}
+          </h3>{" "}
           <div className="grid md:grid-cols-3 gap-8 text-left">
+            {" "}
             {[
               {
                 step: "Discover",
@@ -124,19 +129,21 @@ const About = () => {
                 }}
                 className="p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 text-center cursor-pointer"
               >
+                {" "}
                 <div className="text-indigo-600 text-3xl font-bold mb-3">
-                  {idx + 1}
-                </div>
-                <h4 className="text-xl font-semibold mb-2">{item.step}</h4>
+                  {" "}
+                  {idx + 1}{" "}
+                </div>{" "}
+                <h4 className="text-xl font-semibold mb-2">{item.step}</h4>{" "}
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {item.desc}
-                </p>
+                  {" "}
+                  {item.desc}{" "}
+                </p>{" "}
               </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Meet the Team */}
+            ))}{" "}
+          </div>{" "}
+        </motion.div>{" "}
+        {/* Meet the Team */}{" "}
         <motion.div
           className="mb-16"
           variants={sectionVariant}
@@ -144,10 +151,13 @@ const About = () => {
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
         >
+          {" "}
           <h3 className="text-2xl font-bold text-indigo-600 mb-6 text-center">
-            Meet the Team
-          </h3>
+            {" "}
+            Meet the Team{" "}
+          </h3>{" "}
           <div className="grid md:grid-cols-3 gap-8">
+            {" "}
             {[
               { name: "Arfat Kazi", role: "Founder & CEO" },
               { name: "MR. Sayeed Khushroo", role: "Founder & CEO" },
@@ -164,20 +174,21 @@ const About = () => {
                 }}
                 className="p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 text-center cursor-pointer"
               >
+                {" "}
                 <div className="text-3xl font-bold text-indigo-600 mb-2">
-                  {member.name.split(" ")[0][0]}
-                  {member.name.split(" ")[1][0]}
-                </div>
-                <h4 className="text-xl font-semibold mb-1">{member.name}</h4>
+                  {" "}
+                  {member.name.split(" ")[0][0]} {member.name.split(" ")[1][0]}{" "}
+                </div>{" "}
+                <h4 className="text-xl font-semibold mb-1">{member.name}</h4>{" "}
                 <p className="text-gray-700 dark:text-gray-300">
-                  {member.role}
-                </p>
+                  {" "}
+                  {member.role}{" "}
+                </p>{" "}
               </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Values */}
+            ))}{" "}
+          </div>{" "}
+        </motion.div>{" "}
+        {/* Values */}{" "}
         <motion.div
           className="mb-16"
           variants={sectionVariant}
@@ -185,10 +196,13 @@ const About = () => {
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
         >
+          {" "}
           <h3 className="text-2xl font-bold text-indigo-600 mb-6 text-center">
-            Our Core Values
-          </h3>
+            {" "}
+            Our Core Values{" "}
+          </h3>{" "}
           <ul className="space-y-4 text-left md:max-w-2xl mx-auto">
+            {" "}
             {[
               "Integrity & Transparency",
               "Innovation & AI Excellence",
@@ -202,15 +216,15 @@ const About = () => {
                 variants={itemVariant(idx % 2 === 0 ? -1 : 1)}
                 className="text-gray-700 dark:text-gray-300 leading-relaxed flex items-start"
               >
+                {" "}
                 <span className="text-indigo-600 font-bold mr-2">•</span>{" "}
-                {value}
+                {value}{" "}
               </motion.li>
-            ))}
-          </ul>
-        </motion.div>
-      </div>
+            ))}{" "}
+          </ul>{" "}
+        </motion.div>{" "}
+      </div>{" "}
     </section>
   );
 };
-
 export default About;
