@@ -1,14 +1,24 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function ResetPassword() {
   const { token } = useParams();
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // 👈 added
+  const [loading, setLoading] = useState(false);
 
-  const submit = async (e) => {
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!passwordRegex.test(password)) {
+      return toast.error("Password must contain letters, number & symbol ⚠️");
+    }
+
+    setLoading(true);
 
     try {
       const res = await fetch(
@@ -21,38 +31,82 @@ export default function ResetPassword() {
       );
 
       const data = await res.json();
-      setMsg(data.message);
 
       if (res.ok) {
+        toast.success("Password updated ✅");
         setTimeout(() => navigate("/login"), 1500);
+      } else {
+        toast.error(data.message || "Invalid token");
       }
     } catch {
-      setMsg("Server error");
+      toast.error("Server error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6">
-        <h2 className="text-2xl font-bold text-center dark:text-white">
+    <div
+      className="min-h-screen flex items-center justify-center px-4 
+    bg-gradient-to-br from-[#0a0f1f] via-[#0d1226] to-[#1a0f2e]"
+    >
+      <div
+        className="w-full max-w-md bg-white/10 dark:bg-black/30
+       border border-white/10 rounded-2xl backdrop-blur-xl shadow-2xl 
+       p-8 text-center text-white animate-fadeIn"
+      >
+        <h2
+          className="text-3xl font-extrabold mb-2 bg-gradient-to-r 
+         from-cyan-400 to-purple-400 bg-clip-text text-transparent"
+        >
           Reset Password
         </h2>
 
-        <form className="space-y-4 mt-3" onSubmit={submit}>
-          <input
-            type="password"
-            placeholder="New password"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-lg"
-          />
+        <p className="text-gray-400 text-sm mb-6">
+          Choose a strong new password 🔐
+        </p>
 
-          <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
-            Update Password
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"} // 👈 dynamic input type
+              className="w-full px-4 py-3 rounded-xl bg-black/40 border 
+                border-purple-500/40 focus:border-purple-400 focus:ring-2 
+                focus:ring-purple-400 outline-none text-white 
+                placeholder-gray-400 transition-all"
+              placeholder="New password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            {/* 👁️ Eye toggle button */}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 text-lg"
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
+
+          <button
+            className={`w-full py-3 rounded-xl font-semibold 
+            text-black bg-gradient-to-r from-cyan-400 to-purple-400 
+            tracking-wide shadow-lg hover:shadow-cyan-400/50 
+            hover:scale-[1.02] transition-all
+            ${loading && "opacity-60 cursor-not-allowed"}`}
+            disabled={loading}
+          >
+            {loading ? "Updating..." : "Update Password"}
           </button>
         </form>
 
-        {msg && <p className="text-center mt-3 text-indigo-600">{msg}</p>}
+        <Link
+          to="/login"
+          className="block mt-6 text-sm text-gray-400 hover:text-purple-300 transition"
+        >
+          ← Back to Login
+        </Link>
       </div>
     </div>
   );
