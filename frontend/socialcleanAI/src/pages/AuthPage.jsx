@@ -76,7 +76,8 @@ export default function AuthPage() {
   const toggleAuthMode = () => navigate(isLogin ? "/signup" : "/login");
 
   const handleGoogleAuth = () => {
-    window.location.href = "http://localhost:5000/api/auth/google";
+    window.location.href =
+      "http://localhost:5000/api/auth/google?prompt=select_account";
   };
 
   return (

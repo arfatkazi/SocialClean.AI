@@ -19,6 +19,7 @@ import Reports from "./pages/Reports";
 import AuthPage from "./pages/AuthPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import LoginSuccess from "./pages/LoginSuccess";
 
 /* ==========================================================
    ✅ SCROLL TO TOP ON ROUTE CHANGE
@@ -144,6 +145,7 @@ export default function App() {
             <Route path="/signup" element={<AuthPage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/login-success" element={<LoginSuccess />} />
 
             {/* 🚧 404 fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
