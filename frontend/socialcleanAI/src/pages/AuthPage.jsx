@@ -190,7 +190,7 @@ export default function AuthPage() {
             </button>
           </div>
 
-          {isLogin && loginError && (
+          {isLogin && (
             <div className="text-right">
               <button
                 type="button"
