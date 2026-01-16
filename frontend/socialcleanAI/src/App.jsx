@@ -1,3 +1,5 @@
+console.log("API URL FROM VITE =", import.meta.env.VITE_API_URL);
+
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import Lenis from "@studio-freight/lenis";
