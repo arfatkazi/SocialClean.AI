@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config/api";
 
 export default function AuthForm({ isLogin, navigate }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,15 +33,14 @@ export default function AuthForm({ isLogin, navigate }) {
       if (!form.country) return alert("Country is required.");
       if (!passwordRegex.test(form.password))
         return alert(
-          "Password must be at least 6 characters, include 1 letter, 1 number, and 1 special character."
+          "Password must be at least 6 characters, include 1 letter, 1 number, and 1 special character.",
         );
       if (!form.gender) form.gender = "other"; // default to "other"
     }
 
     const url = isLogin
-      ? "http://localhost:5000/api/auth/login"
-      : "http://localhost:5000/api/auth/signup";
-
+      ? `${API_URL}/api/auth/login`
+      : `${API_URL}/api/auth/signup`;
     try {
       const response = await fetch(url, {
         method: "POST",

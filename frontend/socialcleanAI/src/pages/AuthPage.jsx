@@ -1,3 +1,5 @@
+import { API_URL } from "../config/api";
+
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -42,14 +44,14 @@ export default function AuthPage() {
       if (!form.country) return alert("Country is required.");
       if (!passwordRegex.test(form.password))
         return alert(
-          "Password must be at least 6 characters, include 1 letter, 1 number, and 1 special character."
+          "Password must be at least 6 characters, include 1 letter, 1 number, and 1 special character.",
         );
       if (!form.gender) form.gender = "other"; // default to "other"
     }
 
     const url = isLogin
-      ? "http://localhost:5000/api/auth/login"
-      : "http://localhost:5000/api/auth/signup";
+      ? `${API_URL}/api/auth/login`
+      : `${API_URL}/api/auth/signup`;
 
     try {
       const res = await fetch(url, {
@@ -76,8 +78,7 @@ export default function AuthPage() {
   const toggleAuthMode = () => navigate(isLogin ? "/signup" : "/login");
 
   const handleGoogleAuth = () => {
-    window.location.href =
-      "http://localhost:5000/api/auth/google?prompt=select_account";
+    window.location.href = `${API_URL}/api/auth/google?prompt=select_account`;
   };
 
   return (

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { API_URL } from "../config/api";
 
 export default function ResetPassword() {
   const { token } = useParams();
@@ -21,14 +22,11 @@ export default function ResetPassword() {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/auth/reset-password/${token}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ password }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/auth/reset-password/${token}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
 
       const data = await res.json();
 
