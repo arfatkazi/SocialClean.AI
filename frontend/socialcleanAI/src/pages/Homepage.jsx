@@ -1,4 +1,3 @@
-// import Hero from "../components/Homepage/Hero.jsx";
 import Works from "../components/Homepage/Works.jsx";
 import Feature from "../components/Homepage/Feature.jsx";
 import Security from "../components/Homepage/Security.jsx";

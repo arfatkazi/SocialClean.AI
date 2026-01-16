@@ -8,7 +8,7 @@ import Footer from "./components/Homepage/Footer";
 import Loading from "./components/Loading";
 
 // ✅ Pages
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/Homepage";
 import About from "./pages/About";
 import Scan from "./pages/Scan";
 import Dashboard from "./pages/Dashboard";
