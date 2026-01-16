@@ -1,0 +1,444 @@
+Phase 0 — Product + Compliance Foundation (must-do first)
+Goal
+
+Make sure you’re legally safe + your scope is clear.
+
+Deliverables
+
+Consent + Terms screens (user agrees you will scan and process data)
+
+Risk profile selection: Reputation / Privacy / Explicit / Impersonation
+
+Define supported sources for MVP (example: Google results only, or Google + Twitter links pasted by user)
+
+Exit criteria
+
+User can sign up, accept consent, choose risk profile, define scan scope.
+
+Phase 1 — Project Cleanup + Dev Environment (fixes + structure)
+Goal
+
+Make the repo clean, runnable, and deployable.
+
+Fixes I found in your backend
+
+Your backend package.json scripts are pointing to backend/server.js but your file is actually server.js in the backend root.
+
+✅ Fix:
+
+dev: nodemon server.js
+
+start: node server.js
+
+Deliverables
+
+Remove .git folder from zip (don’t ship internal .git history)
+
+Remove .env from repo (keep a .env.example only)
+
+Add a README: how to run frontend + backend
+
+Add consistent folder naming:
+
+backend/
+
+frontend/socialcleanAI/
+
+Exit criteria
+
+npm run dev works in backend
+
+npm run dev works in frontend
+
+Phase 2 — Backend Core MVP (Auth + Users + Scan objects)
+Goal
+
+Stable API foundation.
+
+Backend work
+
+Auth: register/login/forgot/reset ✅ (you already have)
+
+Add:
+
+Role & plan fields (free/pro)
+
+Rate limiting on scan endpoints (you already have a limiter middleware ✅)
+
+Input validation (Zod/Joi) for scan payloads
+
+DB
+
+User
+
+Scan
+
+ScanItem (each found content item)
+
+Exit criteria
+
+Users can login and create a scan record reliably
+
+Validation prevents bad payloads from breaking backend
+
+Phase 3 — Scan Orchestrator + Queue Worker (production requirement)
+Goal
+
+Scanning must NOT run inside your API process.
+
+Why
+
+Right now scans run in-process (even if async). In production this will crash under load.
+
+Deliverables
+
+Add a queue (simple options):
+
+BullMQ + Redis (recommended)
+
+Split into:
+
+api server (Express)
+
+worker process (scan jobs + AI jobs)
+
+Exit criteria
+
+API only creates jobs + returns scanId
+
+Worker processes jobs and updates DB
+
+Restarting API does NOT kill scans
+
+Phase 4 — Internet Scan Engine (MVP version)
+Goal
+
+Actually “find content” from the web.
+
+MVP options (pick one for first launch)
+
+✅ Best MVP (fast + safe):
+
+User provides: name + aliases + links
+
+Your scan engine:
+
+Google/Bing search via API (or scraping as last resort)
+
+Extract URL + title + snippet + preview image
+
+Deliverables
+
+Normalized “found content” format:
+
+source, url, title, snippet, dateFound, platformType
+
+Dedupe logic (don’t store same URL twice)
+
+Exit criteria
+
+Scan returns a list of URLs with basic metadata
+
+Phase 5 — AI Content Matching (real scoring)
+Goal
+
+Reduce false positives.
+
+Deliverables
+
+Confidence scoring:
+
+Name match score (exact / fuzzy)
+
+Context score (job title, city, known handles)
+
+Image match (optional) (phase-later if needed)
+
+Threshold rules (user-defined sensitivity)
+
+Store reasons:
+
+“matched alias”
+
+“same username”
+
+“context aligned”
+
+Exit criteria
+
+Every ScanItem has: confidence, reasons[], matchedEntities[]
+
+Phase 6 — Severity Scoring + Prioritization
+Goal
+
+Sort what’s important first.
+
+Deliverables
+
+Severity: Low / Medium / High
+
+Category tags:
+
+harassment, impersonation, explicit, doxxing, misinformation, reputation
+
+Priority queue:
+
+High severity gets action suggestions first
+
+Exit criteria
+
+Dashboard shows “Top risks first” automatically
+
+Phase 7 — Ownership & Control Analysis
+Goal
+
+Decide what action is allowed.
+
+Deliverables
+
+For each ScanItem:
+
+isUserOwner (true/false/unknown)
+
+platformControlled (true/false)
+
+actionOptions[] generated:
+
+Edit / Delete / Request Removal / Legal/De-index
+
+Exit criteria
+
+Each item shows available actions (not generic buttons)
+
+Phase 8 — Action Workflows (Edit/Delete/Removal/Legal)
+Goal
+
+Turn findings into real “cleanup actions”.
+
+Deliverables (MVP)
+
+Assisted removal (fastest to ship):
+
+Generate removal request templates (email/webform steps)
+
+Track status: Pending / Submitted / Rejected / Removed
+
+For “De-index”:
+
+Store Google/Bing request templates + links + proof checklist
+
+Phase-later (automation)
+
+Platform APIs for delete/edit (only where permitted)
+
+OAuth linking for user-owned accounts
+
+Exit criteria
+
+User can click “Request Removal” → system creates an Action record and tracks it
+
+Phase 9 — Evidence Vault + Audit Trail (trust + legal proof)
+Goal
+
+Users need proof of what was found and what happened.
+
+Deliverables
+
+Store evidence:
+
+Screenshot (image)
+
+Timestamp
+
+URL hash
+
+Case ID
+
+Audit log:
+
+who did what, when, status changes
+
+Storage
+
+S3-compatible storage (or Cloudinary) for screenshots
+
+Exit criteria
+
+Every action has evidence + timeline history
+
+Phase 10 — Dashboard, Reports, Exports
+Goal
+
+Make it feel like a real SaaS.
+
+Deliverables
+
+Dashboard sections:
+
+Scan summary (counts by severity)
+
+Items list (filter: platform/severity/status)
+
+Actions tracking board
+
+Export:
+
+PDF report (monthly)
+
+CSV export (pro)
+
+Exit criteria
+
+User can see progress from one screen without confusion
+
+Phase 11 — Security Hardening (before production)
+Goal
+
+No leaks, no easy attacks.
+
+Deliverables
+
+Move secrets to production env manager (not .env committed)
+
+Add:
+
+Helmet headers (CSP)
+
+Strict CORS
+
+Request body size limits
+
+Sanitization
+
+Strong rate limits for:
+
+login
+
+forgot password
+
+scan start
+
+Logging: never log tokens / passwords
+
+Exit criteria
+
+Basic pentest checklist passes (no obvious security holes)
+
+Phase 12 — Testing (minimum required)
+Goal
+
+Prevent breaking production.
+
+Deliverables
+
+Backend:
+
+Unit tests for auth + scan creation
+
+Integration tests for scan pipeline
+
+Frontend:
+
+Smoke tests for key pages (login, dashboard, scan, actions)
+
+Exit criteria
+
+CI runs tests and blocks merges on failure
+
+Phase 13 — CI/CD + Docker + Environments
+Goal
+
+Repeatable builds and deployments.
+
+Deliverables
+
+Docker:
+
+backend Dockerfile
+
+worker Dockerfile
+
+frontend build + serve
+
+CI pipeline:
+
+lint + tests + build
+
+Environments:
+
+dev / staging / prod configs
+
+Exit criteria
+
+One command deploy (or one pipeline deploy)
+
+Phase 14 — Production Deployment (go-live)
+Goal
+
+Launch safely.
+
+Recommended setup
+
+Frontend: Vercel/Netlify (fast)
+
+Backend API + Worker: Render/Fly.io/DigitalOcean/AWS ECS
+
+MongoDB Atlas
+
+Redis (Upstash/Redis Cloud)
+
+Object storage (S3/Cloudinary)
+
+Must-haves
+
+HTTPS
+
+Domain + DNS
+
+Logs + monitoring
+
+Exit criteria
+
+Real users can signup, scan, track actions in production
+
+Phase 15 — Observability + Reliability (post-launch)
+Goal
+
+Know when things break.
+
+Deliverables
+
+Monitoring:
+
+health checks
+
+error tracking (Sentry)
+
+metrics (request rate, job queue depth)
+
+Alerts:
+
+scan failed
+
+worker down
+
+too many retries
+
+Exit criteria
+
+You detect failures before users complain
+
+Phase 16 — Scale + Growth Features
+Goal
+
+Add “real moat”.
+
+Options
+
+Reappearance monitoring (scheduled rescans)
+
+Browser extension (capture evidence / report)
+
+More connectors (platform-specific)
+
+Team accounts + case management

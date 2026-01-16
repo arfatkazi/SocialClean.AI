@@ -1,0 +1,164 @@
+A) Phases built from YOUR flowchart (simple + in order)
+Phase 1 — User Onboarding
+
+Flow: User Onboarding
+Build:
+
+Signup/Login
+
+Verify identity (email/OTP)
+
+Consent checkbox (must accept)
+
+Output: user can enter app only after consent
+
+Phase 2 — Define Scan Scope
+
+Flow: Define Scan Scope
+Build:
+
+Form: name, aliases, platforms
+
+Optional: upload image (store preview)
+
+Output: saved scope ready for scan
+
+Phase 3 — Demo Internet Scan Engine (Dummy) ✅ (your screenshot requirement)
+
+Flow: Internet Scan Engine + Content Found?
+Build:
+
+Button: Start Scan
+
+For demo: load dummy scan results (not real web)
+
+If dummy results empty → END
+
+else → show results page
+
+Output: you can showcase product without real scanning
+
+Phase 4 — AI Content Matching (Demo + Rules)
+
+Flow: AI Content Matching + Confidence Threshold
+Build:
+
+Confidence score (dummy or rule-based)
+
+Threshold slider (example 70%)
+
+Below threshold → Ignore + Log
+
+Output: low-confidence content automatically ignored
+
+Phase 5 — Ownership & Control Analysis
+
+Flow: Ownership & Control Analysis + Is User Owner?
+Build:
+
+Store per item:
+
+isUserOwner (yes/no)
+
+platformControlled (yes/no)
+
+Show action buttons based on this
+
+Output: correct actions appear per item
+
+Phase 6 — Actions
+
+Flow: Edit / Delete / Request Removal / Legal-Deindex
+Build actions by content type:
+
+Text / Caption / Comment
+
+Edit (rewrite emotion/language)
+
+Delete
+
+Photo / Video
+
+Remove
+
+Replace
+
+Not owned
+
+Request Removal (template + steps)
+
+Legal/De-index (DPDP/GDPR + DMCA + Google)
+
+Output: user can click action and it updates status
+
+Phase 7 — Confirm → Execute
+
+Flow: Confirm Action → Execute Action
+Build:
+
+confirm modal with preview
+
+demo execution (simulate success after 2 sec)
+
+Output: actions change item status
+
+Phase 8 — Track Status
+
+Flow: Track Status
+Build:
+
+Pending / Removed / Rejected / Need proof
+
+timeline per item
+
+Output: user sees progress clearly
+
+Phase 9 — Dashboard + Reports
+
+Flow: Dashboard + Reports + alerts
+Build:
+
+counts + success rate
+
+export PDF (optional in demo)
+
+“reappearance alert” (demo text first)
+
+Output: final SaaS feel
+
+Phase 10 (After demo) — Real Internet Scan Engine
+
+Replace dummy with:
+
+Google/Bing search API
+
+crawling + dedupe + storage
+
+B) I also generated your Dummy Data JSON (20 items)
+
+Use this in your demo website instantly:
+
+Download demo scan request JSON
+
+Download posts-only JSON
+
+How to use (with your current backend)
+
+Your backend endpoint expects:
+POST /api/scan/start with body: { posts: [...] }
+
+You can test like this (example):
+
+curl -X POST http://localhost:5000/api/scan/start \
+  -H "Content-Type: application/json" \
+  -H "Cookie: token=YOUR_LOGIN_COOKIE" \
+  --data @socialcleanai_demo_scan_request.json
+
+
+If you want, tell me which one you’re doing next:
+
+Only Demo Website UI first (no backend call)
+
+Demo UI + call your backend /api/scan/start
+
+I’ll give you the exact folder + file changes for your current project.

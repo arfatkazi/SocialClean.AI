@@ -1,0 +1,832 @@
+🚀 Phase 1 – Core (MVP Features)
+
+---------------------------------------------------------Backend---------------------------------------------------------------------
+
+These are must-have features to make the website usable:
+
+1. User Authentication
+
+Basic Authentication.  ✅ Done
+
+Social login with Google, Twitter/X, Facebook (via OAuth 2.0).
+
+Store tokens securely in MongoDB. ✅ Done
+
+Basic profile management (name, email, profile picture). 
+
+
+
+
+
+
+
+
+2. Content Fetching
+
+Connect to user’s account (Twitter posts, Instagram captions, Facebook posts, Google Photos).
+
+Fetch recent messages, posts, and images.
+
+Store them temporarily in MongoDB for scanning.
+
+
+3. AI-Based Content Scanning
+
+Text Analysis: Detect bad words, offensive language, private info (emails, phone numbers).
+
+Image Analysis: Detect nudity, violence, drugs (using AI model/API).
+
+Label content with categories: Safe, Offensive, Private Info, Inappropriate.
+
+
+
+
+4. Dashboard
+
+Show scanned results in a clean UI.
+
+Filters: by text, image, flagged reason.
+
+Allow user to select items.
+
+
+
+
+5. Delete / Clean
+
+User can delete flagged posts/messages/photos directly via API call.
+
+Update status in DB (Deleted / Skipped).
+
+⚡ Phase 2 – Improvements (Advanced Features)
+
+Once MVP works, add these for a premium experience:
+
+
+
+6. Auto-Clean Rules
+
+Let users set rules like:
+
+“Delete posts older than 2018 with offensive words.”
+
+“Auto-remove photos with nudity.”
+
+
+
+
+
+7. Multi-Platform Support
+
+Extend support for:
+
+Instagram
+
+LinkedIn
+
+TikTok
+
+Reddit
+
+Gmail (old embarrassing mails 😂).
+
+
+
+
+
+
+8. AI Suggestions
+
+Instead of just deleting, suggest “edit/rephrase” options.
+
+Example: Post says “This sucks” → Suggest “This isn’t great.”
+
+
+
+
+9. Reports & Analytics
+
+Weekly report: how many posts scanned, deleted, safe.
+
+Pie chart of content categories.
+
+10. Premium Features (Monetization)
+
+Free tier: scan only last 50 posts.
+
+Paid tier: unlimited scan, auto-clean, detailed reports.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+🌐 Frontend (Phase 1 – Core MVP)
+1. Homepage
+
+Hero Section → ✅ Done (animated heading + CTA button).
+
+How It Works Section → ✅ Done (step cards with animation).
+
+Features Section → ✅ Done (4 feature cards with staggered animation).
+
+Security Section → ✅ Done (lock icon + animated heading + animated description).
+
+CTA Section → ✅ Done (animated heading, text, and button).
+
+Footer → ✅ Done (basic version).
+
+Dark/Light Mode Toggle → ❌ Not implemented (you’re still on light mode only).
+
+
+
+
+
+2. Authentication Pages
+
+Login/Signup page with OAuth buttons (Google, Facebook, Twitter/X).
+
+Redirects to Dashboard after successful login.
+
+Minimal profile page (display name, email, picture).
+
+
+
+3. Dashboard
+
+Sidebar: Home, Scan, Reports, Settings, Logout.
+
+Main Panel:
+
+Recent Scans (table/grid view).
+
+Filters (Safe, Offensive, Private Info, Inappropriate).
+
+Thumbnails for images flagged.
+
+Action buttons: Delete / Skip.
+
+
+
+4. Scan Page
+
+Connect accounts (Twitter, Facebook, Instagram, Google Photos).
+
+Button: “Scan Now” → triggers backend fetch + AI scan.
+
+Progress bar / loader while scanning.
+
+Results shown in a list/grid.
+
+5. Cleaning Actions
+
+Select posts/images → Delete directly.
+
+Update status live (Deleted / Skipped).
+
+Confirmation modal before deletion.
+
+⚡ Frontend Phase 1 Goal:
+Basic but clean, fast, and functional UI for scanning + cleaning.
+
+🌐 Frontend (Phase 2 – Advanced Features)
+6. Auto-Clean Rules UI
+
+Form builder: user selects platform, conditions (date, keywords, type), action (delete, skip).
+
+Example dropdowns:
+
+Condition: “Posts before 2018”
+
+Filter: “Contains offensive words”
+
+Action: “Auto-delete”
+
+7. Multi-Platform Dashboard
+
+Tabs for each platform (Instagram, LinkedIn, TikTok, Reddit, Gmail).
+
+Unified view with filters across all accounts.
+
+8. AI Suggestions
+
+For flagged text → show alternative phrasing with “Replace” button.
+
+Example:
+Original: “This sucks”
+Suggested: “This isn’t great.”
+
+Option to auto-update the post.
+
+9. Reports & Analytics
+
+Charts (Pie / Bar): distribution of Safe, Offensive, Inappropriate posts.
+
+Weekly stats (scanned, deleted, safe).
+
+Export reports as PDF.
+
+10. Premium Upgrade Page
+
+Pricing plans (Free vs Pro).
+
+Stripe/PayPal integration.
+
+Lock premium features (Auto-Clean, Unlimited Scan, Reports).
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Navbar + Pages for Phase 1 (Core MVP)
+
+👉 These are must-have pages to launch your product and make it usable:
+
+
+
+
+1.Home (Landing Page)
+
+Hero, Features, How It Works, Security, CTA → already ✅ done.
+
+“Sign up Free” button → leads to authentication.
+
+
+
+
+
+2. About Us
+
+Short story: why SocialCleanAI exists.
+
+Mission + Vision → builds trust.
+
+
+
+
+3. Dashboard (after login only)
+
+Sidebar: Home, Scan, Reports, Settings, Logout.
+
+Main UI: results of scans, filters, delete/skip actions.
+
+
+
+
+4.Scan (can be separate page or inside Dashboard)
+
+Connect accounts (Twitter, Facebook, Instagram, Google Photos).
+
+“Scan Now” button → fetch + AI scan.
+
+Show progress + results.
+
+
+
+
+5.Contact Us
+
+Simple form (name, email, message).
+
+Social links + support email.
+
+
+
+6.Login / Signup
+
+OAuth buttons (Google, Facebook, Twitter/X).
+
+Redirect to Dashboard after login.
+
+
+
+
+ "email": "rafhakmungi677@gmail.com",
+  "password": "rafhakmungi@34",
+
+
+
+
+
+
+
+
+
+
+------------------------------------SWIPER EFFECT----------------------------------
+
+import React from "react";
+import { motion } from "framer-motion";
+
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+
+const Works = () => {
+  const steps = [
+    {
+      step: "1",
+      title: "Connect Accounts",
+      desc: "Link your Twitter, Instagram, or Facebook in seconds.",
+    },
+    {
+      step: "2",
+      title: "AI Scan",
+      desc: "Our AI scans your posts for harmful or risky content.",
+    },
+    {
+      step: "3",
+      title: "Clean Up",
+      desc: "Review flagged posts and clean them with one click.",
+    },
+    {
+      step: "4",
+      title: "Stay Secure",
+      desc: "Keep your online presence safe with ongoing monitoring.",
+    },
+    {
+      step: "5",
+      title: "Peace of Mind",
+      desc: "Focus on what matters while we handle your social safety.",
+    },
+  ];
+
+  const headingWords = ["How", "It", "Works"];
+
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.25 },
+    },
+  };
+
+  const wordVariant = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7, ease: "easeOut" },
+    },
+  };
+
+  return (
+    <section className="pt-10 sm:pt-16 md:pt-20 px-4 sm:px-6 md:px-10 transition-colors duration-300">
+      <div className="max-w-6xl mx-auto text-center">
+        {/* Animated Heading */}
+        <motion.h2
+          className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-8 sm:mb-10 text-gray-900 dark:text-gray-100 flex justify-center gap-3"
+          variants={containerVariant}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {headingWords.map((word, i) => (
+            <motion.span key={i} variants={wordVariant}>
+              {word}
+            </motion.span>
+          ))}
+        </motion.h2>
+
+        {/* Swiper with 3D slicer effect */}
+        <Swiper
+          effect={"coverflow"}
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={"auto"}
+          coverflowEffect={{
+            rotate: 30,
+            stretch: 0,
+            depth: 150,
+            modifier: 1,
+            slideShadows: true,
+          }}
+          pagination={{ clickable: true }}
+          modules={[EffectCoverflow, Pagination]}
+          className="pb-16" // extra bottom padding for bullets
+        >
+          {steps.map((item, i) => (
+            <SwiperSlide
+              key={i}
+              className="max-w-xs sm:max-w-sm md:max-w-md group"
+            >
+              {/* Flip wrapper */}
+              <div className="relative w-full h-64 [perspective:1000px]">
+                <div
+                  className="relative w-full h-full rounded-2xl transition-transform duration-500 group-hover:[transform:rotateY(180deg)]"
+                  style={{ transformStyle: "preserve-3d" }}
+                >
+                  {/* Front Side */}
+                  <div className="absolute w-full h-full flex flex-col items-center text-center p-4 sm:p-6 md:p-8 rounded-2xl bg-gray-100 dark:bg-gray-800 [backface-visibility:hidden]">
+                    <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-3">
+                      {item.step}
+                    </div>
+                    <h3 className="font-semibold text-lg sm:text-xl md:text-2xl text-gray-900 dark:text-white mb-1">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300">
+                      {item.desc}
+                    </p>
+                  </div>
+
+                  {/* Back Side */}
+                  <div
+                    className="absolute w-full h-full flex items-center justify-center rounded-2xl bg-indigo-600 text-white [backface-visibility:hidden]"
+                    style={{ transform: "rotateY(180deg)" }}
+                  >
+                    <p className="text-center px-4">
+                      More info about {item.title}!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Move pagination down */}
+        <style>{`
+          .swiper-pagination {
+            bottom: -30px !important; /* pushes bullets further below */
+          }
+        `}</style>
+      </div>
+    </section>
+  );
+};
+
+export default Works;
+
+
+
+
+
+----------------------------------SEOND EFFECT------------------------------------------------------
+
+import React from "react";
+import { motion } from "framer-motion";
+
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+
+const Works = () => {
+  const steps = [
+    {
+      step: "1",
+      title: "Connect Accounts",
+      desc: "Link your Twitter, Instagram, or Facebook in seconds.",
+    },
+    {
+      step: "2",
+      title: "AI Scan",
+      desc: "Our AI scans your posts for harmful or risky content.",
+    },
+    {
+      step: "3",
+      title: "Clean Up",
+      desc: "Review flagged posts and clean them with one click.",
+    },
+    {
+      step: "4",
+      title: "Stay Secure",
+      desc: "Keep your online presence safe with ongoing monitoring.",
+    },
+    {
+      step: "5",
+      title: "Peace of Mind",
+      desc: "Focus on what matters while we handle your social safety.",
+    },
+  ];
+
+  const headingWords = ["How", "It", "Works"];
+
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.25 },
+    },
+  };
+
+  const wordVariant = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7, ease: "easeOut" },
+    },
+  };
+
+  return (
+    <section className="pt-10 sm:pt-16 md:pt-20 px-4 sm:px-6 md:px-10 transition-colors duration-300">
+      <div className="max-w-6xl mx-auto text-center">
+        {/* Animated Heading */}
+        <motion.h2
+          className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-8 sm:mb-10 text-gray-900 dark:text-gray-100 flex justify-center gap-3"
+          variants={containerVariant}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {headingWords.map((word, i) => (
+            <motion.span key={i} variants={wordVariant}>
+              {word}
+            </motion.span>
+          ))}
+        </motion.h2>
+
+        {/* Swiper with 3D slicer effect */}
+        <Swiper
+          effect={"coverflow"}
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={"auto"}
+          coverflowEffect={{
+            rotate: 30,
+            stretch: 0,
+            depth: 150,
+            modifier: 1,
+            slideShadows: true,
+          }}
+          pagination={{ clickable: true }}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          modules={[EffectCoverflow, Pagination, Autoplay]}
+          className="pb-10"
+        >
+          {steps.map((item, i) => (
+            <SwiperSlide key={i} className="max-w-xs sm:max-w-sm md:max-w-md">
+              <motion.div
+                className="flex flex-col items-center text-center p-4 sm:p-6 md:p-8 rounded-2xl bg-gray-100 dark:bg-gray-800 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.6 }}
+              >
+                <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-3">
+                  {item.step}
+                </div>
+                <h3 className="font-semibold text-lg sm:text-xl md:text-2xl text-gray-900 dark:text-white mb-1">
+                  {item.title}
+                </h3>
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300">
+                  {item.desc}
+                </p>
+              </motion.div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </section>
+  );
+};
+
+export default Works;
+
+
+
+------------------------------------------------THIRD EFFECT--------------------------------------------------------
+
+import React, { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Autoplay, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/navigation";
+
+const Works = () => {
+  const steps = [
+    {
+      step: "1",
+      title: "Connect Accounts",
+      desc: "Link your Twitter, Instagram, or Facebook in seconds.",
+    },
+    {
+      step: "2",
+      title: "AI Scan",
+      desc: "Our AI scans your posts for harmful or risky content.",
+    },
+    {
+      step: "3",
+      title: "Clean Up",
+      desc: "Review flagged posts and clean them with one click.",
+    },
+    {
+      step: "4",
+      title: "Stay Secure",
+      desc: "Keep your online presence safe with ongoing monitoring.",
+    },
+    {
+      step: "5",
+      title: "Peace of Mind",
+      desc: "Focus on what matters while we handle your social safety.",
+    },
+  ];
+
+  const headingWords = ["How", "It", "Works"];
+
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.25 } },
+  };
+
+  const wordVariant = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7, ease: "easeOut" },
+    },
+  };
+
+  // refs for swiper and navigation buttons
+  const swiperRef = useRef(null);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
+  // After render, attach navigation refs to swiper and initialize/update navigation
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    const prevEl = prevRef.current;
+    const nextEl = nextRef.current;
+
+    if (!swiper || !prevEl || !nextEl) return;
+
+    // attach and initialize navigation
+    // some Swiper versions require destroying existing nav first
+    if (swiper.params && swiper.navigation) {
+      try {
+        swiper.params.navigation.prevEl = prevEl;
+        swiper.params.navigation.nextEl = nextEl;
+
+        // re-init navigation to pick up the elements
+        swiper.navigation.destroy();
+        swiper.navigation.init();
+        swiper.navigation.update();
+      } catch (err) {
+        // ignore init errors
+        // console.warn("Swiper nav init error", err);
+      }
+    }
+  }, []); // run once after mount
+
+  return (
+    <section className="pt-10 sm:pt-16 md:pt-20 px-4 sm:px-6 md:px-10 transition-colors duration-300">
+      <div className="max-w-6xl mx-auto text-center">
+        {/* Animated Heading */}
+        <motion.h2
+          className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-8 sm:mb-10 text-gray-900 dark:text-gray-100 flex justify-center gap-3"
+          variants={containerVariant}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {headingWords.map((word, i) => (
+            <motion.span key={i} variants={wordVariant}>
+              {word}
+            </motion.span>
+          ))}
+        </motion.h2>
+
+        {/* Swiper */}
+        <Swiper
+          onSwiper={(s) => (swiperRef.current = s)}
+          effect={"coverflow"}
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={"auto"}
+          loop={true} // infinite loop
+          coverflowEffect={{
+            rotate: 30,
+            stretch: 0,
+            depth: 150,
+            modifier: 1,
+            slideShadows: true,
+          }}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          // navigation will be attached via refs in useEffect
+          navigation={{
+            prevEl: prevRef.current,
+            nextEl: nextRef.current,
+          }}
+          modules={[EffectCoverflow, Autoplay, Navigation]}
+          className="pb-10"
+        >
+          {steps.map((item, i) => (
+            <SwiperSlide
+              key={i}
+              className="max-w-xs sm:max-w-sm md:max-w-md group"
+            >
+              {/* Flip wrapper */}
+              <div className="relative w-full h-64 [perspective:1000px]">
+                <div
+                  className="relative w-full h-full rounded-2xl transition-transform duration-500 group-hover:[transform:rotateY(180deg)]"
+                  style={{ transformStyle: "preserve-3d" }}
+                >
+                  {/* Front Side */}
+                  <div className="absolute w-full h-full flex flex-col items-center text-center p-4 sm:p-6 md:p-8 rounded-2xl bg-gray-100 dark:bg-gray-800 [backface-visibility:hidden]">
+                    <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-3">
+                      {item.step}
+                    </div>
+                    <h3 className="font-semibold text-lg sm:text-xl md:text-2xl text-gray-900 dark:text-white mb-1">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300">
+                      {item.desc}
+                    </p>
+                  </div>
+
+                  {/* Back Side */}
+                  <div
+                    className="absolute w-full h-full flex items-center justify-center rounded-2xl bg-indigo-600 text-white [backface-visibility:hidden]"
+                    style={{ transform: "rotateY(180deg)" }}
+                  >
+                    <p className="text-center px-4">
+                      More info about {item.title}!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Custom SVG Arrows (wired with refs above) */}
+        <div className="flex justify-between items-center max-w-md mx-auto mt-4">
+          <button
+            ref={prevRef}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md transition"
+            aria-label="Previous"
+          >
+            {/* left chevron SVG */}
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          <button
+            ref={nextRef}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md transition"
+            aria-label="Next"
+          >
+            {/* right chevron SVG */}
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Works;
+
+
+
+------------------------------------SWIPER EFFECT END----------------------------------
