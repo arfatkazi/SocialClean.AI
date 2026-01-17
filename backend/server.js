@@ -26,7 +26,7 @@ app.use(
   cors({
     origin: process.env.BASE_CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 app.use(morgan("dev"));
 
@@ -36,27 +36,27 @@ app.use(
     secret: process.env.SESSION_SECRET || "supersecret",
     resave: false,
     saveUninitialized: false,
-  })
+  }),
 );
 
 app.use(passport.initialize());
 
-const aj = arcjet({
-  key: process.env.ARCJET_KEY,
-  rules: [
-    shield({ mode: "LIVE" }),
-    detectBot({
-      mode: "LIVE",
-      allow: ["CATEGORY:SEARCH_ENGINE"],
-    }),
-    tokenBucket({
-      mode: "LIVE",
-      refillRate: 5,
-      interval: 10,
-      capacity: 10,
-    }),
-  ],
-});
+// const aj = arcjet({
+//   key: process.env.ARCJET_KEY,
+//   rules: [
+//     shield({ mode: "LIVE" }),
+//     detectBot({
+//       mode: "LIVE",
+//       allow: ["CATEGORY:SEARCH_ENGINE"],
+//     }),
+//     tokenBucket({
+//       mode: "LIVE",
+//       refillRate: 5,
+//       interval: 10,
+//       capacity: 10,
+//     }),
+//   ],
+// });
 
 app.use("/api", async (req, res, next) => {
   const decision = await aj.protect(req, { requested: 1 });
