@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Twitter, Facebook, Instagram, Image } from "lucide-react";
 import { motion } from "framer-motion";
 import AIAnalysisModal from "../components/AIAnalysisModal";
-
+import { API_URL } from "../config/api";
 export default function Scan() {
   const [isScanning, setIsScanning] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -69,7 +69,7 @@ export default function Scan() {
         return;
       }
 
-      const res = await fetch("http://localhost:5000/api/scan/start", {
+      const res = await fetch(`${API_URL}/api/scan/start`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,15 +98,12 @@ export default function Scan() {
         }
 
         try {
-          const r = await fetch(
-            `http://localhost:5000/api/scan/${data.scanId}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${freshToken}`,
-              },
-            }
-          );
+          const r = await fetch(`${API_URL}/api/scan/${data.scanId}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${freshToken}`,
+            },
+          });
 
           if (!r.ok) return;
           const sd = await r.json();

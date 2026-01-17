@@ -22,7 +22,7 @@ const Dashboard = () => {
   const fetchLatestScan = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    fetch("http://localhost:5000/api/scan/latest/now", {
+    fetch(`${API_URL}/api/scan/latest/now`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : null))
@@ -143,8 +143,8 @@ const Dashboard = () => {
                               item.category === "Offensive"
                                 ? "text-red-500"
                                 : item.category === "Private Info"
-                                ? "text-yellow-500"
-                                : "text-green-500"
+                                  ? "text-yellow-500"
+                                  : "text-green-500"
                             }`}
                           >
                             {item.category}

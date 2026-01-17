@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import AuthForm from "./AuthForm";
 import GoogleButton from "./GoogleButton";
+import { API_URL } from "../config/api";
 
 export default function LoginPage() {
   const navigate = useNavigate();
 
   const handleGoogleAuth = () => {
-    window.location.href =
-      "http://localhost:5000/api/auth/google?prompt=select_account";
+    window.location.href = `${API_URL}/api/auth/google?prompt=select_account`;
   };
 
   return (
