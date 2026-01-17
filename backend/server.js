@@ -41,22 +41,22 @@ app.use(
 
 app.use(passport.initialize());
 
-// const aj = arcjet({
-//   key: process.env.ARCJET_KEY,
-//   rules: [
-//     shield({ mode: "LIVE" }),
-//     detectBot({
-//       mode: "LIVE",
-//       allow: ["CATEGORY:SEARCH_ENGINE"],
-//     }),
-//     tokenBucket({
-//       mode: "LIVE",
-//       refillRate: 5,
-//       interval: 10,
-//       capacity: 10,
-//     }),
-//   ],
-// });
+const aj = arcjet({
+  key: process.env.ARCJET_KEY,
+  rules: [
+    shield({ mode: "LIVE" }),
+    detectBot({
+      mode: process.env.NODE_ENV === "production" ? "LIVE" : "OFF",
+      allow: ["CATEGORY:SEARCH_ENGINE", "TOOL:CURL", "TOOL:POSTMAN"],
+    }),
+    tokenBucket({
+      mode: "LIVE",
+      refillRate: 5,
+      interval: 10,
+      capacity: 10,
+    }),
+  ],
+});
 
 app.use("/api", async (req, res, next) => {
   const decision = await aj.protect(req, { requested: 1 });
