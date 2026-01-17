@@ -10,6 +10,7 @@ import {
   Check,
 } from "lucide-react";
 import DashboardCharts from "../components/DashboardCharts";
+import { API_URL } from "../config/api";
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState("home");
