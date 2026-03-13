@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v5
 
       - name: Install dependencies
-        working-directory: frontend/socialcleanai
+        working-directory: frontend/socialcleanAI
         run: npm install
 
   test:
