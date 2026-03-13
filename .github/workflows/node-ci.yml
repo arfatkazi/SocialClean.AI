@@ -36,7 +36,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout Code
-        working-directory: forntend/socialcleanAI
+        working-directory: frontend/socialcleanAI
         run: npm run build
     
 
